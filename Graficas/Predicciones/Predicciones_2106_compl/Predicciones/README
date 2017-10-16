@@ -1,0 +1,16 @@
+GraficasCC: Datos completos y meterologia por cuadrantes
+GraficasCCR: Datos completos, meteorologia por cuadrantes y datos de los contaminante de las estaciones con buena prediccion
+GraficasCM : Datos completos sin meteorologia
+GraficasCP : Datos completos y el promedio de la meteorologia
+GraficasCPR : Datos completos, promedio de la meteorologia y datos de los contaminante de las estaciones con buena prediccion
+GraficasGCC : Datos completos sin meterologia usando Gradient descent
+GraficasGLC : Datos limpios sin meterologia usando Gradient descent
+GraficasLC : Datos limpios y meteorologia por cuadrantes
+GraficasLCR : Datos limpios, meteorologia por cuadrantes y datos de los contaminante de las estaciones con buena prediccion
+GraficasLM : Datos limpios sin meteorologia
+GraficasLP: Datos limpios y promedio de la meteorologia 
+GraficasLPR: Datos limpios , promedio de la meteorologia y datos de los contaminante de las estaciones con buena prediccion
+GraficasCCB: Datos completos, meteoroligia por cuadrantes y se usa bootstrap
+GraficasCPB: Datos completos, promedio de la meteorologia y se usa bootstrap
+GraficasLCB : Datos limpios, meteorologia por cuadrantes y se usa bootstrap
+GraficasLPB : Datos limpios, promedio de la meteorologia y se usa bootstrap
