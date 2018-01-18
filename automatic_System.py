@@ -9,40 +9,71 @@ import prediction as pre
 import autoTraining as tr
 from NetCDF.makeCsv import open_netcdf, checkFile
 
-dirNetCDF = '/DATA/WRF_Operativo/2018/' #direccion de los archivos NetCDF
-#dirCsv = '/data/totalData/totalCuadrantes/';
-dirCsv = '/home/pablo/DATA/DataCuadrantes/' #direccion de los archivos creados apartir de los NetCDF
-dirData = '/home/pablo/PollutionForecast/ContaminationForecast/data/DatosLCB/'; #Direccion de datos de entrenamiento
-dirTrain = '/home/pablo/PollutionForecast/ContaminationForecast/trainData/TrainLCB/'; #Direccion de entrenamiento de la red neuronal
-estaciones = ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM','LPR','SJA','IZT','SAG','TAH','ATI','FAC','UIZ','MER','PED','TLA','XAL','CHO','BJU'];
-variables=['V10','RAINC','T2', 'TH2', 'RAINNC', 'PBLH', 'SWDOWN', 'GLW'];
-dataBackup = df.DataFrame;
 
-
-def configuracion():
+def configuracion(variables):
+    """
+    function to extract the name of the NetCDF file from the current day and
+    from a previous day
+    :param Variable: meteorological variables
+    :type variables: String list
+    :return: list with the name of the files and the day
+    :type return: String list
+    """
     nameNetcdf = "wrfout_d02_"
-    actual = datetime.now();
+    actual = datetime.now()
     actual = actual - timedelta(hours=1)
-    actualNetcdf = nameNetcdf+ str(actual.year)+ "-"+ numString(actual.month)+ "-"+numString(actual.day)+"_00.nc";
-    actualCsv = variables[0]+"_"+str(actual.year)+ "-"+ numString(actual.month)+ "-"+numString(actual.day)+".csv";
+    actualNetcdf = nameNetcdf + str(actual.year) + "-" + numString(actual.month) + "-"+numString(actual.day)+"_00.nc";
+    actualCsv = variables[0] + "_" + str(actual.year) + "-" + numString(actual.month)+ "-"+numString(actual.day)+".csv";
     ayer = actual - timedelta(days=1)
-    ayerCsv = variables[0]+"_"+str(ayer.year)+ "-"+ numString(ayer.month)+ "-"+numString(ayer.day)+".csv";
-    return [actual,ayer,actualNetcdf,actualCsv,ayerCsv];
+    ayerCsv = variables[0] + "_" + str(ayer.year) + "-" + numString(ayer.month) + "-"+numString(ayer.day)+".csv";
+    return [actual, ayer, actualNetcdf, actualCsv, ayerCsv]
+
 
 def buscarArchivo(archivo, carpeta):
-    for root, dir, ficheros in os.walk(carpeta,topdown=True):
+    """
+    function to search a file in a defined folder
+    :param archivo: file to search
+    :type archivo: String
+    :param carpeta: address where the file will be searched
+    :type crpeta: String
+    :return: true or false
+    :type return: boolean
+    """
+    for root, dir, ficheros in os.walk(carpeta, topdown=True):
         for i in ficheros:
             if archivo in i:
-                return True;
-    return False;
+                return True
+    return False
 
 
-def leerArchivo(informacion):
-    dataBackup = back()
-    if buscarArchivo(informacion[3],dirCsv):
-        fecha= str(informacion[0].year)+"-"+numString(informacion[0].month)+"-"+numString(informacion[0].day)
-        dataMet = unionMeteorologia(fecha, informacion[0]);
-        dataMet = dataMet.drop('fecha',axis =1)
+def leerArchivo(informacion, estaciones, variables, dirNetCDF, dirCsv, dirData, dirTrain, dirFestivos, dataBackup, path, pathCopyData):
+    """
+    function for the automatic prediction of ozone
+    :param informacion:name of netcdf and current date
+    :type informacion: list
+    :param estaciones: list with weather stations
+    :type estaciones: list
+    :param variables: meteorological variables
+    :param dirNetCDF: address of netcdf files
+    :type dirNetCDF : String
+    :param dirCsv: Address of processed meteorology archives
+    :type dirCsv : String
+    :param dirData: address of the files with training information
+    :type dirData: String
+    :param dirTrain: address of the training files of the neural network
+    :type dirTrain: String
+    :param dirFestivos: address of the file with the holidays
+    :type dirFestivos: String
+    :param path:  address where it is saved in .cvs file
+    :type path: String
+    :param pathCopyData: address to copy the file
+    :type pathCopyData: String
+    """
+    dataBackup = back(dirData)
+    if buscarArchivo(informacion[3], dirCsv):
+        fecha = str(informacion[0].year) + "-" + numString(informacion[0].month)+"-"+numString(informacion[0].day)
+        dataMet = unionMeteorologia(fecha, informacion[0], dirCsv, variables)
+        dataMet = dataMet.drop('fecha', axis=1)
         for value in estaciones:
             print(value);
             data = baseContaminantes(informacion[0],value);
@@ -51,29 +82,27 @@ def leerArchivo(informacion):
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                valPred = prediccion(value, data)
+                valPred = prediccion(value, data, dirData, dirTrain)
                 print("Informacion insuficiente para la prediccion");
                 guardarPrediccion(value,informacion[0],[-1]);
             else:
-                #data = data.merge(dataMet,how='left', on='fecha');
+                # data = data.merge(dataMet,how='left', on='fecha');
                 data = separateDate(data)
-                data = unionData(data,informacion[0])
+                data = unionData(data, informacion[0], dirFestivos)
                 data = df.concat([data,dataMet], axis=1);
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                print(data.iloc[0,:])
-                valPred = prediccion(value, data);
+                print(data)
+                valPred = prediccion(value, data, dirData, dirTrain)
                 print(valPred);
                 guardarPrediccion(value,informacion[0],valPred)
     elif buscarArchivo(informacion[2],dirNetCDF) : #NetCDF
-        direccioNetCDF = dirNetCDF+ str(informacion[0].month).zfill(2) +"_"+  deMonth(informacion[0].month) + "/"
-        #stringClear = makeCsv.clearString(informacion[2]);
-        data = open_netcdf(direccioNetCDF+informacion[2],informacion[2],informacion[2]);
-        #checkFile(data,informacion[2],fecha,2);
+        direccioNetCDF = dirNetCDF+ str(informacion[0].month) +"_"+  deMonth(informacion[0].month) + "/"
+        data = open_netcdf(direccioNetCDF+informacion[2],informacion[2],informacion[2], pathCopyData);
         fecha= str(informacion[0].year)+"-"+numString(informacion[0].month)+"-"+numString(informacion[0].day)
-        checkFile(data,informacion[2],fecha,2);
-        dataMet = unionMeteorologia(fecha, informacion[0]);
+        checkFile(data,informacion[2],fecha,2,path);
+        dataMet = unionMeteorologia(fecha, informacion[0], dirCsv, variables)
         dataMet = dataMet.drop('fecha',axis =1)
         for value in estaciones:
             data = baseContaminantes(informacion[0],value);
@@ -82,25 +111,25 @@ def leerArchivo(informacion):
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                valPred = prediccion(value, data);
+                valPred = prediccion(value, data, dirData, dirTrain)
                 print("Informacion insuficiente para la prediccion");
                 guardarPrediccion(value,informacion[0],[-1]);
             else:
                 data = separateDate(data)
-                data = unionData(data,informacion[0])
+                data = unionData(data, informacion[0], dirFestivos)
                 data = df.concat([data,dataMet], axis=1);
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                print(data.iloc[0,:])
-                valPred = prediccion(value, data);
+                print(data)
+                valPred = prediccion(value, data, dirData, dirTrain)
                 print(valPred);
                 guardarPrediccion(value,informacion[0],valPred)
     else:
         if buscarArchivo(informacion[4], dirCsv):
             # buscarArchivo(informacion[4]); #csv ayer
             fechaAyer= str(informacion[1].year)+"-"+numString(informacion[1].month)+"-"+numString(informacion[1].day)
-            dataMet = unionMeteorologia(fechaAyer, informacion[1]);
+            dataMet = unionMeteorologia(fechaAyer, informacion[1], dirCsv, variables)
             dataMet = dataMet.drop('fecha',axis =1)
             for value in estaciones:
                 print(value);
@@ -110,24 +139,24 @@ def leerArchivo(informacion):
                     data = data.fillna(value=-1)
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    valPred = prediccion(value, data);
+                    valPred = prediccion(value, data, dirData, dirTrain)
                     print("Informacion insuficiente para la prediccion");
                     guardarPrediccion(value,informacion[0],[-1]);
                 else:
                     data = separateDate(data)
-                    data = unionData(data,informacion[0])
+                    data = unionData(data, informacion[0], dirFestivos)
                     data = df.concat([data,dataMet], axis=1);
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    print(data.iloc[0,:])
-                    valPred  = prediccion(value, data);
+                    print(data)
+                    valPred  = prediccion(value, data, dirData, dirTrain)
                     print(valPred);
                     guardarPrediccion(value,informacion[0],valPred)
         else:
             anteAyer = informacion[1] - timedelta(days=1)
             nameCsv =   variables[0]+"_"+str(anteAyer.year)+ "-"+ numString(anteAyer.month)+ "-"+numString(anteAyer.day)+".csv";
             fechaAnteAyer= str(anteAyer.year)+"-"+numString(anteAyer.month)+"-"+numString(anteAyer.day)
-            dataMet = unionMeteorologia(fechaAnteAyer, anteAyer)
+            dataMet = unionMeteorologia(fechaAnteAyer, anteAyer, dirCsv, variables)
             dataMet = dataMet.drop('fecha',axis =1)
             for value in estaciones:
                 print(value);
@@ -137,52 +166,98 @@ def leerArchivo(informacion):
                     data = data.fillna(value=-1)
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    valPred = prediccion(value, data);
+                    valPred = prediccion(value, data, dirData, dirTrain)
                     print("Informacion insuficiente para la prediccion");
                     guardarPrediccion(value,informacion[0],[-1]);
                 else:
                     data = separateDate(data)
-                    data = unionData(data,informacion[0])
+                    data = unionData(data, informacion[0], dirFestivos)
                     data = df.concat([data,dataMet], axis=1);
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    print(data.loc[0,:])
-                    valPred  = prediccion(value, data);
+                    print(data)
+                    valPred  = prediccion(value, data, dirData, dirTrain)
                     print(valPred);
                     guardarPrediccion(value,informacion[0],valPred)
-    #for x in estaciones:
-        #training(informacion[1],x,dirTrain,dirData);
+    # for x in estaciones:
+        # training(informacion[1],x,dirTrain,dirData, dirFestivos, variables);
 
 
-
-def prediccion(estacion,data):
-    temp = data.ix[0].values;
-    temp = temp[1:];
-    dataPred = pre.normalize(temp,estacion,"O3",dirData);
-    dataPred= convert(dataPred);
+def prediccion(estacion, data, dirData, dirTrain):
+    """
+    function that sends the data to the neural network for the prediction of the pollutant
+    :param estacion: name the station
+    :type estacion: String
+    :param data: information for the prediction
+    :type data : list float32
+    :param dirData: address of the files with training information
+    :type dirData: String
+    :param dirTrain: address of the training files of the neural network
+    :type dirTrain: String
+    :return: prdiction values
+    :type return : float32
+    """
+    temp = data.ix[0].values
+    temp = temp[1:]
+    dataPred = pre.normalize(temp,estacion,"O3",dirData)
+    dataPred= convert(dataPred)
     prediccion = pre.prediction(estacion,"O3",[dataPred],dirTrain,dirData)
     print(prediccion)
-    prediccion1 = pre.desNorm(prediccion,estacion,"O3",dirData);
-    return prediccion1;
+    prediccion1 = pre.desNorm(prediccion,estacion,"O3",dirData)
+    return prediccion1
+
 
 def convert(data):
+    """
+    function to convert a matrix into an array
+    :param data: matrix to convert
+    :type param: matrix
+    :return: array
+    :type return: array float32
+    """
     size = len(data);
-    vl = np.ones([1,size]);
-    i = 0;
+    vl = np.ones([1,size])
+    i = 0
     for x in data:
-        vl[0,i]= x
-        i+=1;
+        vl[0, i] = x
+        i += 1
     return vl
 
 
 def baseContaminantes(fecha, estacion):
+    """
+    function to bring the information of the contaminants from the database
+    :param fecha: date to bring the information
+    :type fecha: date
+    :param estacion:name of the station from which the information is extracted
+    :type estacion: String
+    :return: array with pollutant information
+    :type return: array float32
+    """
     fechaActual = str(fecha.year)+'-'+numString(fecha.month)+'-'+numString(fecha.day)+' '+numString(fecha.hour)+':00:00'
     data = fd.readData(fechaActual, fechaActual, [estacion], "O3")
     return data;
 
 
-def training(fechaAyer, estacion, dirTrain, dirData):
-    print(estacion);
+def training(fechaAyer, estacion, dirTrain, dirData, dirCsv, dirFestivos, variables):
+    """
+    function to train the neural network with the information of 24 hours before
+    :param fechaAyer: date of the previous day
+    :type fechaAyer: date
+    :param estacion: name the station
+    :type estacion: String
+    :param dirData: address of the files with training information
+    :type dirData: String
+    :param dirTrain: address of the training files of the neural network
+    :type dirTrain: String
+    :param dirFestivos: address of the file with the holidays
+    :type dirFestivos: String
+    :param dirCsv: Address of processed meteorology archives
+    :type dirCsv : String
+    :param variables: meteorological variables
+    :type variables: string list
+    """
+    print(estacion)
     fecha = str(fechaAyer.year)+'/'+numString(fechaAyer.month)+'/'+numString(fechaAyer.day)+' '+numString(fechaAyer.hour)+':00:00';
     fechaMet = str(fechaAyer.year)+"-"+numString(fechaAyer.month)+"-"+numString(fechaAyer.day);
     fechaBuild = str(fechaAyer.year)+"/"+numString(fechaAyer.month)+"/"+numString(fechaAyer.day);
@@ -191,10 +266,10 @@ def training(fechaAyer, estacion, dirTrain, dirData):
     if data.empty:
         print("No se puede hacer el entrenamiento")
     else:
-        dataMet = unionMeteorologia(fechaMet, fechaAyer)
+        dataMet = unionMeteorologia(fechaMet, fechaAyer, dirCsv, variables)
         dataMet = dataMet.drop('fecha',axis =1)
         data = separateDate(data)
-        data = unionData(data,fechaAyer)
+        data = unionData(data, fechaAyer, dirFestivos)
         data = df.concat([data,dataMet], axis=1);
         data = filterData(data, dirData + estacion + "_O3.csv")
         data = data.fillna(value=-1)
@@ -202,12 +277,23 @@ def training(fechaAyer, estacion, dirTrain, dirData):
         tr.training(xy_values[0], xy_values[1], estacion, dirTrain, 'O3', dirData)
 
 
-def unionMeteorologia(fecha, fechaComplete):
+def unionMeteorologia(fecha, fechaComplete, dirCsv, variables):
+    """
+    function to join the information of the pollutants with the metrological
+    :param fecha: current date
+    :type fecha: date
+    :param fechaComplete: current date complete
+    :type fechaComplete: date
+    :param dirCsv: Address of processed meteorology archives
+    :type dirCsv: string
+    :param variables: meteorological variables
+    :type variables: string list
+    """
     data = df.read_csv(dirCsv + "U10_" + fecha + ".csv")
     for i in variables:
         name = i + "_" + fecha + ".csv"
         dataTemp = df.read_csv(dirCsv + name)
-        data= data.merge(dataTemp, how='left', on='fecha')
+        data = data.merge(dataTemp, how='left', on='fecha')
     fechaM = str(fechaComplete.year)+'-'+numString(fechaComplete.month)+'-'+numString(fechaComplete.day)+' '+numString(fechaComplete.hour)+':00:00';
     filterData = data[(data['fecha'] == fechaM)]
     filterData = filterData.reset_index(drop=True)
@@ -215,6 +301,12 @@ def unionMeteorologia(fecha, fechaComplete):
 
 
 def convertDates(data):
+    """
+    function to convert a string into a date and save it in a dataframe
+    :param data: dataframe with the dates to convert
+    :type data : DataFrame
+    :return: DataFrame
+    """
     fecha = data['fecha'];
     data = data.drop(labels='fecha',axis=1);
     date = []
@@ -226,15 +318,15 @@ def convertDates(data):
     return data;
 
 
-def unionData(data, fechaComplete):
+def unionData(data, fechaComplete, dirFestivos):
     """
     Function to join the data of the netcdf and the data of the pollutants
-    :param data:pataFrame(minollutants data
+    :param data: DataFrame pollutants data
     :type data: dataFrame
     :return: dataFrame
     """
     fechaM = str(fechaComplete.year)+'-'+numString(fechaComplete.month)+'-'+numString(fechaComplete.day)+' '+numString(fechaComplete.hour)+':00:00';
-    dataFestivos = df.read_csv('/home/pablo/PollutionForecast/ContaminationForecast/data/Festivos.csv')
+    dataFestivos = df.read_csv(dirFestivos)
     dataFestivos = dataFestivos.drop(labels='Unnamed: 0',axis=1);
     dataFestivos2 = convertDates(dataFestivos);
     dataFestivos2 = dataFestivos2[(dataFestivos2['fecha'] == fechaM)]
@@ -244,26 +336,49 @@ def unionData(data, fechaComplete):
     return data;
 
 
-
 def guardarPrediccion(estacion, fecha, Valor):
+    """
+    function to save the prediction in the database
+    :param estacion: name the station
+    :type estacion: string
+    :param fecha: current date
+    :type fecha: date
+    :param valor: prediction value
+    :type valor: float32
+    """
     fecha = fecha + timedelta(days=1)
     fechaActual = str(fecha.year)+'-'+str(fecha.month)+'-'+str(fecha.day)+' '+str(fecha.hour)+':00:00';
     fd.saveData(estacion, fechaActual, Valor)
 
 
 def filterData(data, dirData):
+    """
+    function to remove the columns of a dataframe
+    :param data: dataframe to which the columns will be removed
+    :type data: DataFrame
+    :param dirData: address of the files with training information
+    :type dirData: String
+    :return: DataFrame
+    """
     temp = df.read_csv(dirData)
     listColumns = list(temp.columns)
     data = data.loc[:, listColumns]
     return data
 
 
-def back():
+def back(dirData):
     temp = df.read_csv(dirData + "MGH_O3.csv")
     return temp.loc[:0]
 
 
 def numString(num):
+    """
+    function to convert a number of a digit into a string with two digits
+    :param num:number to convert
+    :type num: string
+    :return : string with two digits
+    :type return: String
+    """
     if num < 10:
         return "0" + str(num)
     else:
@@ -271,6 +386,13 @@ def numString(num):
 
 
 def deMonth(m):
+    """
+    function to convert a number in the assigned month
+    :param m: number of months
+    :type m : int
+    :return : name of the month
+    :type return: String
+    """
     if m == 1:
         return "enero"
     elif m == 2:
@@ -295,6 +417,7 @@ def deMonth(m):
         return "noviembre"
     elif m == 12:
         return "diciembre"
+
 
 def separateDate(data):
     """
@@ -344,6 +467,7 @@ def separateDate(data):
     data['sinDay'] = dataSinDay
     return data;
 
+
 def weekday(year,month,day):
     """
     Function to take day of the week using the congruence of Zeller , 1 is Sunday
@@ -365,7 +489,18 @@ def weekday(year,month,day):
     return [week,sinWeek]
 
 
-information = configuracion()
+dirNetCDF = '/DATA/WRF_Operativo/2017/'  # direccion de los archivos NetCDF
+# dirCsv = '/data/totalData/totalCuadrantes/';
+dirCsv = '/home/pablo/DATA/DataCuadrantes/'  # direccion de los archivos creados apartir de los NetCDF
+dirData = '/home/pablo/PollutionForecast/ContaminationForecast/data/DatosLCB/'; #Direccion de datos de entrenamiento
+dirTrain = '/home/pablo/PollutionForecast/ContaminationForecast/trainData/TrainLCB/'; #Direccion de entrenamiento de la red neuronal
+dirFestivos = '/home/pablo/PollutionForecast/ContaminationForecast/data/Festivos.csv'
+estaciones = ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM', 'LPR', 'SJA', 'IZT', 'SAG', 'TAH', 'ATI', 'FAC', 'UIZ', 'MER', 'PED', 'TLA', 'XAL', 'CHO', 'BJU']
+variables = ['V10', 'RAINC', 'T2', 'TH2', 'RAINNC', 'PBLH', 'SWDOWN', 'GLW']
+pathCopyData = '../data/NetCDF'
+path = '/home/pablo/DATA/DataCuadrantes'
+dataBackup = df.DataFrame
+information = configuracion(variables)
 # nameNetcdf = "wrfout_d02_"
 # hoy= datetime.strptime("2017-12-12 19:00:00",'%Y-%m-%d %H:%M:%S')
 # dayer = datetime.strptime("2017-09-23 19:00:00",'%Y-%m-%d %H:%M:%S')
@@ -374,4 +509,4 @@ information = configuracion()
 # ayerCsv = variables[0]+"_"+str(dayer.year)+ "-"+ str(dayer.month)+ "-"+str(dayer.day)+".csv";
 # test =[hoy,dayer,actualNetcdf,actualCsv,ayerCsv]
 # leerArchivo(test);
-leerArchivo(information)
+leerArchivo(information, estaciones, variables, dirNetCDF, dirCsv, dirData, dirTrain, dirFestivos, dataBackup,path,pathCopyData)

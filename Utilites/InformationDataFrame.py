@@ -13,6 +13,10 @@ dirr = '../data/DatosCC/';
 contaminant = 'O3';
 
 def information():
+    """
+    function to create a graph of the columns and lines that has information
+    each station in the  Red Automática de Monitoreo Atmosférico (RAMA)
+    """
     anio = [];
     columnas = [];
     numIndex = [];
@@ -45,6 +49,9 @@ def information():
 
 
 def estImg():
+    """
+    function to create a heatmap
+    """
     for value in est:
         print(value);
         name = dirr + value + '_'+contaminant+'.csv';
@@ -56,6 +63,13 @@ def estImg():
 
 
 def anios(data):
+    """
+    function to extract the number of years of data that a dataframe
+    :param data: DataFrame
+    :type data: DataFrame
+    :return: numbers of years
+    :return type: int
+    """
     anios = data['fecha'].values
     actual = 2017
     for value in anios:
@@ -64,7 +78,15 @@ def anios(data):
             actual = valueAnio.year;
     return 2016 -actual
 
+
 def nombreEst(station):
+    """
+    function that returns from the full name of a station
+    :param station: abbreviation of the name of the station
+    :type station: String
+    :return: full name of the station
+    :type return: String
+    """
     if station == 'AJM':
         return 'Ajusco Medio';
     elif station == 'MGH':
@@ -110,7 +132,15 @@ def nombreEst(station):
     elif station == 'XAL':
         return 'Xalostoc';
 
+
 def nameC(nameColumn):
+    """
+    function that returns from the abbreviation name of a columns
+    :param station: full name of the column
+    :type station: String
+    :return: abbreviation name of the column
+    :type return: String
+    """
     names = []
     for val in nameColumn:
         if 'cont_pmco' in val:
@@ -138,7 +168,16 @@ def nameC(nameColumn):
     return names
 
 
-def colormap(name,est,nameColumn):
+def colormap(name, est, nameColumn):
+    """
+    function to create a heatmap
+    :param name: station name
+    :type name: String
+    :param est: station
+    :type est: String
+    :param nameColumn : list with the name of the dataframe columns
+    :type nameColumn: String list
+    """
     nameColumn = nameC(nameColumn)
     title = 'Imagen de los datos de la estacion '+ nombreEst(est);
     data = df.read_csv(name,index_col='fecha');
@@ -151,5 +190,4 @@ def colormap(name,est,nameColumn):
     plt.close()
 
 
-
-information();
+information()

@@ -106,22 +106,24 @@ class FormatData(object):
         build.dropna();
         return build.fillna(value=-1);
 
-    def saveData(estacion,fecha,Valor):
-        oztool = ContIOTools();
-        conexion = SqlCont();
-        conn = conexion.getPostgresConn();
-        cur= conn.cursor();
-        #conexion database
-        sql = """INSERT INTO forecast_otres(fecha,val,id_est) VALUES (\'{0}\',{1},\'{2}\')""".format(fecha,Valor[0],estacion);
-        cur.execute(sql);
-        conn.commit();
-        cur.close();
-        
 
-    def buildClass2(allData,estation,contaminant,delta,startDate, endDate):
-        oztool = ContIOTools();
-        conexion = SqlCont();
-        conn = conexion.getPostgresConn();
+    def buildClass2(allData, estation, contaminant, delta, startDate, endDate):
+        """
+        Function so that every date in the allData table is added n hours and get the value that belongs to it.
+        :param allData: is data extracted  the function readData
+        :type allData: DataFrame.
+        :param estation: station from wich the data will be taken.
+        :type estation: string.
+        :param contaminant: contaminant from wich the data will be taken.
+        :type contaminant: string.
+        :param delta : number of hours added to the original.
+        :type delta: int, float
+        :return: build
+        :rtype: DataFrame
+        """
+        oztool = ContIOTools()
+        conexion = SqlCont()
+        conn = conexion.getPostgresConn()
         cur= conn.cursor();
         #conexion database
         tableContaminant = oztool.findTable(contaminant);# name the contaminant in the database
@@ -146,3 +148,23 @@ class FormatData(object):
         cur.close();
         #The connection to the database is closed
         return build;
+
+    def saveData(estacion, fecha, Valor):
+        """
+        function to save the prediction in the database
+        :param estacion: name of the station to which the prediction belongs
+        :type estacion: string
+        :param fecha: prediction date
+        :type fecha: date
+        :param valor: prediction value
+        :type valor: float32
+        """
+        oztool = ContIOTools();
+        conexion = SqlCont();
+        conn = conexion.getPostgresConn();
+        cur= conn.cursor();
+        #conexion database
+        sql = """INSERT INTO forecast_otres(fecha,val,id_est) VALUES (\'{0}\',{1},\'{2}\');""".format(fecha,Valor[0],estacion);
+        cur.execute(sql)
+        conn.commit()
+        cur.close()

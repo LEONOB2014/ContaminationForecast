@@ -10,6 +10,7 @@ Function to create csv file with the holidays from 1996 to 2016 from another cvs
 2 = sep
 """
 
+
 def readCsv():
     """
     Function to create csv file with the holidays from 1996 to 2016 from another cvs file
@@ -89,6 +90,9 @@ def makeDates(anio):
     return listDates;
 
 def make18():
+    """
+    Function th create the holidays of the year 2018
+    """
     data = df.read_csv('../data/Festivos.csv');
     fecha = makeDates('2018');
     f = df.DataFrame(fecha, columns=['fecha']);

@@ -32,9 +32,20 @@ def normalize(data, station, contaminant, dirData):
 
 
 def desNorm(data, station, contaminant, dirData):
+    """
+    function to denormalize a value
+    :param data: value to be unmasked
+    :type data: float32
+    :param station: name the stations
+    :type station: String
+    :param contaminant: name the pollutant
+    :type contaminant: String
+    :param dirData: address of the files with training information
+    :type dirData: String
+    """
     real = []
     nameC = 'cont_otres_' + station.lower()
-    #nameC= 'cont_otres'
+    # nameC= 'cont_otres'
     name = station + '_' + contaminant
     values = df.read_csv(dirData + name + '_MaxMin.csv')
     index = values.columns[0]
@@ -126,4 +137,3 @@ def prediction(station, contaminant, arrayPred, dirTrain, dirData):
             result.append(r[0, 0])
         sess.close()
         return result
-

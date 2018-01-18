@@ -6,14 +6,28 @@ import os
 import numpy as np
 
 contaminant = 'O3'
+nameContaminant = 'cont_otres_'
 endDate = '2018/01/10'
 dirr = 'data/DatosLC/'
 dirTotalCsv = 'data/totalData/totalCuadrantes/'
 
 
-def saveData(listEstations, startDate):
+def saveData(listEstations, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant):
     """
     Function for the save data in the type file .csv
+    :param listEstations: list with stations
+    :type listEstations: String list
+    :param startDate: start date
+    :type startDate: date
+    :param nameContaminant: name of the pollutant in the database
+    :type nameContaminant: String
+    :param endDate: end date
+    :type endDate: date
+    :param dirr:direction of save data
+    :type dirr: String
+    :param dirTotalCsv: address of the cvs files
+    :type dirTotalCsv: String
+    :param contaminant: name pollutant
     """
     createFile()
     est = listEstations
@@ -22,7 +36,7 @@ def saveData(listEstations, startDate):
     while i <= tam:  # 21
         print(est[i])
         print(startDate[i])
-        nameDelta = 'cont_otres_' + est[i] + '_delta'
+        nameDelta = nameContaminant + est[i] + '_delta'
         nameD = est[i] + '_' + contaminant + '.csv'
         nameB = est[i] + '_' + contaminant + '_pred.csv'
         tempData = fd.readData(startDate[i], endDate, [est[i]], contaminant)
@@ -48,19 +62,32 @@ def saveData(listEstations, startDate):
         # build = tempBuild #solo para cuando no se quiere quitar el ruido
         data = data.fillna(value=-1)
         data = separateDate(data)
-        data = unionData(data)
+        data = unionData(data, dirTotalCsv)
         data = data.drop_duplicates(keep='first')
         build = build.drop_duplicates(keep='first')
-        maxAndMinValues(data, est[i], contaminant)
+        maxAndMinValues(data, est[i], contaminant, dirr)
         build = filterData(data, build)
         data.to_csv(dirr + nameD, encoding='utf-8', index=False)  # save the data in file "data/[station_contaminant].csv"
         build.to_csv(dirr + nameB, encoding='utf-8', index=False)  # save the data in file "data/[station_contaminant_pred].csv]
         i += 1
 
 
-def saveData2(listEstations, startDate):
+def saveData2(listEstations, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant):
     """
     Function for the save data in the type file .csv
+    :param listEstations: list with stations
+    :type listEstations: String list
+    :param startDate: start date
+    :type startDate: date
+    :param nameContaminant: name of the pollutant in the database
+    :type nameContaminant: String
+    :param endDate: end date
+    :type endDate: date
+    :param dirr:direction of save data
+    :type dirr: String
+    :param dirTotalCsv: address of the cvs files
+    :type dirTotalCsv: String
+    :param contaminant: name pollutant
     """
     createFile()
     est = listEstations
@@ -69,7 +96,7 @@ def saveData2(listEstations, startDate):
     while i <= tam:  # 21
         print(est[i])
         print(startDate[i])
-        nameDelta = 'cont_otres_' + est[i] + '_delta'
+        nameDelta = nameContaminant + est[i] + '_delta'
         nameD = est[i] + '_' + contaminant + '.csv'
         nameB = est[i] + '_' + contaminant + '_pred.csv'
         tempData = fd.readData(startDate[i], endDate, [est[i]], contaminant)
@@ -89,8 +116,8 @@ def saveData2(listEstations, startDate):
         build = build.drop(labels='index', axis=1)
         data = data.drop(labels='index', axis=1)
         dataTemp = separateDate(data)
-        dataTemp2 = unionData(dataTemp)
-        maxAndMinValues(dataTemp2, est[i], contaminant)
+        dataTemp2 = unionData(dataTemp, dirTotalCsv)
+        maxAndMinValues(dataTemp2, est[i], contaminant, dirr)
         data = dataTemp2
         data = data.drop_duplicates(keep='first')
         build = build.drop_duplicates(keep='first')
@@ -101,6 +128,14 @@ def saveData2(listEstations, startDate):
 
 
 def filterData(data, build):
+    """
+    function to remove the columns of a dataframe
+    :param data: dataframe to which the columns will be removed
+    :type data: DataFrame
+    :param dirData: address of the files with training information
+    :type dirData: String
+    :return: DataFrame
+    """
     datesTemp = df.DataFrame(data['fecha'], columns=['fecha'])
     build = build.merge(datesTemp, how='right', on='fecha')
     return build
@@ -118,7 +153,7 @@ def createFile():
         i += 1
 
 
-def maxAndMinValues(data, station, contaminant):
+def maxAndMinValues(data, station, contaminant, dirr):
     """
     Function to obtain the maximun and minumum values and save them in a file
     :param data: DataFrame that contains the data from where the maximun ans minumum values will be extracted
@@ -215,6 +250,12 @@ def weekday(year, month, day):
 
 
 def convertDates(data):
+    """
+    function to convert a string into a date and save it in a dataframe
+    :param data: dataframe with the dates to convert
+    :type data : DataFrame
+    :return: DataFrame
+    """
     fecha = data['fecha']
     data = data.drop(labels='fecha', axis=1)
     date = []
@@ -226,7 +267,7 @@ def convertDates(data):
     return data
 
 
-def unionData(data):
+def unionData(data, dirTotalCsv):
     """
     Function to join the data of the netcdf and the data of the pollutants
     :param data:pataFrame(minollutants data
@@ -261,6 +302,6 @@ est1 = ['CHO']
 est2 = ['BJU']
 startDate1 = ['2007/07/20']
 startDate2 = ['1986/01/12']
-saveData(est, startDate)
-saveData2(est1, startDate1)
-saveData2(est2, startDate2)
+saveData(est, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
+saveData2(est1, startDate1, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
+saveData2(est2, startDate2, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)

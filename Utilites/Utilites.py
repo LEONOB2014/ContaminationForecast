@@ -33,6 +33,14 @@ def converToArray(alldata,contaminant):
 
 
 def prepro(data,build,contaminant):
+    """
+    Function to normalize the data of the neuronal network
+    :param data: training data
+    :param build: training data
+    :param contaminant: name of the contaminant
+    :return : normalize data
+    :type return: list
+    """
     x_vals = data.values;
     x = x_vals.shape;
     columns = x[1];
@@ -49,6 +57,14 @@ def prepro(data,build,contaminant):
 
 
 def prepro2(data,build,contaminant):
+    """
+    Function to normalize the data of the neuronal network
+    :param data: training data
+    :param build: training data
+    :param contaminant: name of the contaminant
+    :return : normalize data
+    :type return: list
+    """
     x_vals = data.values;
     x = x_vals.shape;
     columns = x[1];

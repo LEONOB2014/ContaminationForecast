@@ -27,7 +27,25 @@ def init_bias(shape):
         bias=  tf.Variable(tf.random_normal(shape));
         return bias;
 
-def train(x_d,y_data, columns,iteraciones,station,contaminant,dirTrain):
+
+def train(x_d, y_data, columns, iteraciones, station, contaminant, dirTrain):
+    """
+    function where the neural network is defined and trained
+    :param x_d: Training data
+    :type x_d: matrix float32
+    :param y_data: predicction data (Training data)
+    :type y_data: matrix float32
+    :param columns: number of columns in the matrix with training data
+    :type columns: int
+    :param iteraciones: number of iteration that the neural network will be trained
+    :type iteraciones: int
+    :param station: name of the station that will train the neural network
+    :type station: String
+    :param contaminant: name of the pollutant that the neural network will predict
+    :type contaminant: String
+    :param dirTrain: address where the training is kept
+    :type dirTrain: String
+    """
     name = 'train_'+station+'_'+contaminant;
     # Create graph session
     sess= tf.Session();
@@ -98,4 +116,3 @@ def train(x_d,y_data, columns,iteraciones,station,contaminant,dirTrain):
     sess.close()
     #tf.reset_default_graph();
     #return total_loss;
-

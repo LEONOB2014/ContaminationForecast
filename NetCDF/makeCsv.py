@@ -41,6 +41,13 @@ def conver1D(array):
 
 
 def divData(data):
+    """
+    Function to divide the data matrix into 4 submatrices
+    :param data: information of NetCDF
+    :type data: NetCDF
+    :return : 4 submatrices
+    :return type : matrix float32
+    """
     total = np.zeros((0, 4), dtype=np.float32)
     for i in range(48):
         dataValue = data[i]
@@ -111,7 +118,7 @@ def nameColumns(name,numbColumns):
     return namesColumns
 
 
-def makeCsv(net, date, opt):
+def makeCsv(net, date, opt, path):
     """
     Function to create .csv files of some variables that are in a NetCDF file,
     the .cvs file is saved in the data/NetCDF path of the project
@@ -146,13 +153,22 @@ def makeCsv(net, date, opt):
 
 
     for ls in range(len(var_cut)):
-        saveData(var_cut[ls],variables[ls],date,opt);
+        saveData(var_cut[ls],variables[ls],date,opt, path);
 
 
-
-def saveData(var, variables, date, opt):
+def saveData(var, variables, date, opt, path):
     """
-    Function for the data create
+    function to save the information in a .csv file
+    :param var: information of NetCDF
+    :type var: NetCDF
+    :param variables: meteorological variables
+    :type variables: String
+    :param date: date of day
+    :type date: date
+    :param opt: option to save file
+    :type opt: int
+    :param path: address where it is saved in .cvs file
+    :type path: String
     """
     dateVal = makeDates(date)
     allData = makeDates(date)
@@ -178,10 +194,15 @@ def saveData(var, variables, date, opt):
         allData.to_csv(filq, encoding='utf-8', index=False)
 
 
-def readCsv(variables):
+def readCsv(variables, path, pathCsv):
     """
+    function to join the information of the variables in a single file
     :param variables : netCDF4 file name
     :type variables: string
+    :param path: address where it is saved in .cvs file
+    :type path: String
+    :param pathCsv: address of csv files
+    :type pathCsv: String
     """
     # os.makedirs('../data/totalData/')
     dataVa = df.DataFrame()
@@ -204,8 +225,11 @@ def readCsv(variables):
 
 def completeMet(data):
     """
+    function to store the meteorological information in a dataframe
     :param data: meteorology data
     :type data: DataFrame
+    :return: DataFrame with information
+    :return type: DataFrame
     """
     fechaOri = []
     newData = df.DataFrame([], columns=data.columns)
@@ -232,7 +256,20 @@ def completeMet(data):
     return fechas
 
 
-def open_netcdf(ls ,nameFile, cadena):
+def open_netcdf(ls, nameFile, cadena, pathCopyData):
+    """
+    Function to open a NetCDF file
+    :param ls: address file
+    :type ls: String
+    :param nameFile: file name
+    :type nameFile: String
+    :param cadena: name of the file without extension
+    :type cadena: String
+    :param pathCopyData: address to copy the file
+    :type pathCopyData: String
+    :return : data in NetCDF
+    :type return: NetCDF
+    """
     name = '.nc.tar.gz'
     name1 = '.nc.gz'
     patron = re.compile('.*' + name)
@@ -260,10 +297,16 @@ def open_netcdf(ls ,nameFile, cadena):
     return data
 
 
-def readFiles(opt):
+def readFiles(opt, path, pathCopyData):
     """
     Function to read all NetCDF files that are in the specified path
     and named by the format Dom1_year-month-day.nc
+    :param opt: option to save data
+    :return opt: int
+    :param path: address file
+    :return path: String
+    :param pathCopyData: address to copy the file
+    :type pathCopyData: String
     """
     date = '\d\d\d\d-\d\d-\d\d'
     name = 'wrfout_d02_'
@@ -285,8 +328,8 @@ def readFiles(opt):
         cadena = clearString(tfil)
         print(cadena)
         try:
-            net = open_netcdf(ls, tfil, cadena)
-            checkFile(net, tfil, f[0], opt)
+            net = open_netcdf(ls, tfil, cadena, pathCopyData)
+            checkFile(net, tfil, f[0], opt, path)
             tfileCopy.remove(tfil)
             tbaseCopy.remove(tbas)
         except (OSError, EOFError) as e:
@@ -309,7 +352,14 @@ def readFiles(opt):
             print('ERROR DE LECTURA')
 
 
-def totalFiles():
+def totalFiles(pathCopyData, pathNetCDF):
+    """
+    Function to save the address of the netCDF in a txt file
+    :param pathCopyData: address to copy the file
+    :type pathCopyData: String
+    :param pathNetCDF: address where the net files are located
+    :type pathNetCDF: String
+    """
     dirr = pathCopyData
     dirr2 = pathNetCDF
     name = 'wrfout_d02_\d\d\d\d-\d\d-\d\d_00.nc'
@@ -327,30 +377,14 @@ def totalFiles():
     fbase.to_csv(dirr + 'tbase.txt', encoding='utf-8', index=False)
 
 
-def readFiles2(opt):
-    dirr = pathNetCDF
-    name = 'wrfout_d02_'
-    date = '\d\d\d\d-\d\d-\d\d'
-    patron = re.compile(name + '.*')
-    patron2 = re.compile(date)
-    for base, dirs, files in os.walk(dirr, topdown=True):
-        # print(base);
-        # print(dirs);
-        for var in files:
-            if patron.match(var) != None:
-                ls = base + '/' + var
-                f = patron2.findall(var)
-                comp = tarfile.open(ls, 'r')
-                cadena = clearString(var)
-                print(cadena)
-                comp.extract(cadena, pathCopyData)
-                comp.close()
-                net = Dataset(pathCopyData + cadena)
-                checkFile(net, var, f[0], opt)
-                os.remove(pathCopyData + cadena)
-
-
 def clearString(name):
+    """
+    function to remove the extension of a file
+    :param name: file name
+    :type name: String
+    :return: name file witout extension
+    :return type: String
+    """
     if name.find(".tar") != 0:
         name = name.replace(".tar", "")
 
@@ -359,7 +393,7 @@ def clearString(name):
     return name
 
 
-def checkFile(net, name, date, opt):
+def checkFile(net, name, date, opt, path):
     """
     Function to check if the file has
     the requiered parameters.
@@ -375,19 +409,16 @@ def checkFile(net, name, date, opt):
     try:
         net.variables['XLONG'][:]
         net.variables['XLAT'][:]
-        makeCsv(net, date, opt)
+        makeCsv(net, date, opt, path)
     except KeyError:
         print('error in file: ' + name)
 
 
 if not os.path.exists('data/NetCDF'): os.makedirs('data/NetCDF')
 if not os.path.exists('data/totalData'): os.makedirs('data/totalData')
-# totalFiles();
-# readFiles(2);
-# readFiles2(1);
+# totalFiles(pathCopyData, pathNetCDF);
+# readFiles(2, path, pathCopyData);
 # variables=['U10','V10','RAINC','T2', 'TH2', 'RAINNC', 'PBLH', 'SWDOWN', 'GLW'];
 # for i in variables:
 #    print(i)
-#    readCsv(i);
-# readCsv(variables[0]);
-# makeDates('2017-06-13');
+#    readCsv(i, path, pathCsv);
