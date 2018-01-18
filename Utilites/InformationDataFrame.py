@@ -110,7 +110,36 @@ def nombreEst(station):
     elif station == 'XAL':
         return 'Xalostoc';
 
+def nameC(nameColumn):
+    names = []
+    for val in nameColumn:
+        if 'cont_pmco' in val:
+            names.append('pmco')
+        elif 'cont_pmdoscinco' in val:
+            names.append('pmdoscinco')
+        elif 'cont_nox' in val:
+            names.append('nox')
+        elif 'cont_codos' in val:
+            names.append('codos')
+        elif 'cont_co' in val:
+            names.append('co')
+        elif 'cont_nodos' in val:
+            names.append('nodos')
+        elif 'cont_no' in val:
+            names.append('no')
+        elif 'cont_otres' in val:
+            names.append('otres')
+        elif 'cont_sodos' in val:
+            names.append('sodos')
+        elif 'cont_pmdiez' in val:
+            names.append('pmdiez')
+        else:
+            names.append(val)
+    return names
+
+
 def colormap(name,est,nameColumn):
+    nameColumn = nameC(nameColumn)
     title = 'Imagen de los datos de la estacion '+ nombreEst(est);
     data = df.read_csv(name,index_col='fecha');
     plt.figure(figsize=(12.2,8.4))
@@ -120,6 +149,7 @@ def colormap(name,est,nameColumn):
     plt.savefig("../Graficas/Informacion/Imagen_"+est+".png", dpi=600);
     plt.show();
     plt.close()
+
 
 
 information();

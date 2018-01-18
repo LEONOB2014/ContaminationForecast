@@ -5,9 +5,11 @@ import os
 
 est = ['AJM','MGH','CCA','SFE','NEZ','CAM','LPR','SJA','IZT','SAG','TAH','FAC','CHO','BJU','UAX','CUA','ATI','UIZ','MER','PED','TLA','XAL'];
 estComplete = [];
-dirDataComp = ['data/DatosCP/','data/DatosLP/','data/DatosCC/','data/DatosLC/'];
+#dirDataComp = ['data/DatosCP/','data/DatosLP/','data/DatosCC/','data/DatosLC/'];
+dirDataComp = ['data/DatosLC/'];
 #dirDataSave = ['data/DatosCPM/','data/DatosLPM/','data/DatosCCM/','data/DatosLCM/'];
-dirDataSave = ['data/DatosCPB/','data/DatosLPB/','data/DatosCCB/','data/DatosLCB/'];
+#dirDataSave = ['data/DatosCPB/','data/DatosLPB/','data/DatosCCB/','data/DatosLCB/'];
+dirDataSave = ['data/DatosLCB/'];
 #dirDataSave = ['data/unionGeo/DatosCC/','data/unionGeo/DatosLC/','data/unionGeo/DatosCP/','data/unionGeo/DatosLP/'];
 dirDataMet = 'data/DatosCM/';
 contaminant = 'O3';

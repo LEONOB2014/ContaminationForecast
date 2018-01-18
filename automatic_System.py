@@ -9,7 +9,7 @@ import prediction as pre
 import autoTraining as tr
 from NetCDF.makeCsv import open_netcdf, checkFile
 
-dirNetCDF = '/DATA/WRF_Operativo/2017/' #direccion de los archivos NetCDF
+dirNetCDF = '/DATA/WRF_Operativo/2018/' #direccion de los archivos NetCDF
 #dirCsv = '/data/totalData/totalCuadrantes/';
 dirCsv = '/home/pablo/DATA/DataCuadrantes/' #direccion de los archivos creados apartir de los NetCDF
 dirData = '/home/pablo/PollutionForecast/ContaminationForecast/data/DatosLCB/'; #Direccion de datos de entrenamiento
@@ -62,12 +62,12 @@ def leerArchivo(informacion):
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                print(data)
+                print(data.iloc[0,:])
                 valPred = prediccion(value, data);
                 print(valPred);
                 guardarPrediccion(value,informacion[0],valPred)
     elif buscarArchivo(informacion[2],dirNetCDF) : #NetCDF
-        direccioNetCDF = dirNetCDF+ str(informacion[0].month) +"_"+  deMonth(informacion[0].month) + "/"
+        direccioNetCDF = dirNetCDF+ str(informacion[0].month).zfill(2) +"_"+  deMonth(informacion[0].month) + "/"
         #stringClear = makeCsv.clearString(informacion[2]);
         data = open_netcdf(direccioNetCDF+informacion[2],informacion[2],informacion[2]);
         #checkFile(data,informacion[2],fecha,2);
@@ -92,7 +92,7 @@ def leerArchivo(informacion):
                 data = data.fillna(value=-1)
                 data = filterData(data,dirData+value+"_O3.csv");
                 data = data.fillna(value=-1)
-                print(data)
+                print(data.iloc[0,:])
                 valPred = prediccion(value, data);
                 print(valPred);
                 guardarPrediccion(value,informacion[0],valPred)
@@ -119,7 +119,7 @@ def leerArchivo(informacion):
                     data = df.concat([data,dataMet], axis=1);
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    print(data)
+                    print(data.iloc[0,:])
                     valPred  = prediccion(value, data);
                     print(valPred);
                     guardarPrediccion(value,informacion[0],valPred)
@@ -146,7 +146,7 @@ def leerArchivo(informacion):
                     data = df.concat([data,dataMet], axis=1);
                     data = filterData(data,dirData+value+"_O3.csv");
                     data = data.fillna(value=-1)
-                    print(data)
+                    print(data.loc[0,:])
                     valPred  = prediccion(value, data);
                     print(valPred);
                     guardarPrediccion(value,informacion[0],valPred)
