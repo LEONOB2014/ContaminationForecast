@@ -1,0 +1,521 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>makeCsv &#8212; Contamination Forecast 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for makeCsv</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">df</span>
+<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="k">import</span> <span class="n">Dataset</span>
+<span class="kn">from</span> <span class="nn">NewBBOX</span> <span class="k">import</span> <span class="n">NewBBOX</span> <span class="k">as</span> <span class="n">ne</span>
+<span class="c1">#from .NewBBOX import NewBBOX as ne</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">concat</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/home/pablo/DATA/DataCuadrantes&#39;</span>
+<span class="n">pathCsv</span> <span class="o">=</span> <span class="s1">&#39;../data/totalData/totalCuadrantes/&#39;</span>
+<span class="n">pathCopyData</span> <span class="o">=</span> <span class="s1">&#39;../data/NetCDF&#39;</span>
+<span class="n">pathNetCDF</span> <span class="o">=</span> <span class="s1">&#39;/DATA/WRF_Operativo/&#39;</span>
+
+
+<div class="viewcode-block" id="conver1D"><a class="viewcode-back" href="../makeCsv.html#makeCsv.conver1D">[docs]</a><span class="k">def</span> <span class="nf">conver1D</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to convert an array to a list</span>
+
+<span class="sd">    :param array: array with the data</span>
+<span class="sd">    :type array = matrix float32</span>
+<span class="sd">    :return : list with the data</span>
+<span class="sd">    :return type: list float32</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">):</span>
+        <span class="n">tempData</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">array1D</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tempData</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+                <span class="n">array1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">array1D</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span></div>
+
+
+<div class="viewcode-block" id="divData"><a class="viewcode-back" href="../makeCsv.html#makeCsv.divData">[docs]</a><span class="k">def</span> <span class="nf">divData</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to divide the data matrix into 4 submatrices</span>
+
+<span class="sd">    :param data: information of NetCDF</span>
+<span class="sd">    :type data: NetCDF</span>
+<span class="sd">    :return : 4 submatrices</span>
+<span class="sd">    :return type : matrix float32</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">48</span><span class="p">):</span>
+        <span class="n">dataValue</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">array1D</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">dataValue</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">numRows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">numColumns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">dataSecc1</span> <span class="o">=</span> <span class="n">dataValue</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">numRows</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">numColumns</span><span class="p">]</span>
+        <span class="n">dataSecc2</span> <span class="o">=</span> <span class="n">dataValue</span><span class="p">[</span><span class="n">numRows</span><span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">numColumns</span><span class="p">]</span>
+        <span class="n">dataSecc3</span> <span class="o">=</span> <span class="n">dataValue</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">numRows</span><span class="p">,</span> <span class="n">numColumns</span><span class="p">:]</span>
+        <span class="n">dataSecc4</span> <span class="o">=</span> <span class="n">dataValue</span><span class="p">[</span><span class="n">numRows</span><span class="p">:,</span> <span class="n">numColumns</span><span class="p">:]</span>
+        <span class="n">prom1</span> <span class="o">=</span> <span class="n">dataSecc1</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">numColumns</span> <span class="o">*</span> <span class="n">numRows</span><span class="p">)</span>
+        <span class="n">prom2</span> <span class="o">=</span> <span class="n">dataSecc2</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">numColumns</span> <span class="o">*</span> <span class="n">numRows</span><span class="p">)</span>
+        <span class="n">prom3</span> <span class="o">=</span> <span class="n">dataSecc3</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">numColumns</span> <span class="o">*</span> <span class="n">numRows</span><span class="p">)</span>
+        <span class="n">prom4</span> <span class="o">=</span> <span class="n">dataSecc4</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="p">(</span><span class="n">numColumns</span> <span class="o">*</span> <span class="n">numRows</span><span class="p">)</span>
+        <span class="n">array1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prom1</span><span class="p">)</span>
+        <span class="n">array1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prom2</span><span class="p">)</span>
+        <span class="n">array1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prom3</span><span class="p">)</span>
+        <span class="n">array1D</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prom4</span><span class="p">)</span>
+        <span class="c1"># div= np.vsplit(dataValue,2);</span>
+        <span class="c1"># divSplit = np.array_split(div[0],8);</span>
+        <span class="c1"># divSplit1 = np.array_split(div[1],8);</span>
+        <span class="c1"># for val in divSplit:</span>
+        <span class="c1">#    meanVal = np.mean(val);</span>
+        <span class="c1">#    array1D.append(meanVal);</span>
+        <span class="c1"># for val in divSplit1:</span>
+        <span class="c1">#    meanVal = np.mean(val);</span>
+        <span class="c1">#    array1D.append(meanVal)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">array1D</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total</span></div>
+
+
+<div class="viewcode-block" id="makeDates"><a class="viewcode-back" href="../makeCsv.html#makeCsv.makeDates">[docs]</a><span class="k">def</span> <span class="nf">makeDates</span><span class="p">(</span><span class="n">date</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create a list with the format year-month-day hours:minutes:seconds</span>
+
+<span class="sd">    from 00 hours to 23 hours</span>
+<span class="sd">    :param date : initial date</span>
+<span class="sd">    :param type : string</span>
+<span class="sd">    :return : list with the dates</span>
+<span class="sd">    :return type : list datatime</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">listDates</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">date</span> <span class="o">+</span> <span class="s1">&#39; 00:00:00&#39;</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="n">listDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">47</span><span class="p">):</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">listDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">allData</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">listDates</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">allData</span></div>
+
+
+<div class="viewcode-block" id="nameColumns"><a class="viewcode-back" href="../makeCsv.html#makeCsv.nameColumns">[docs]</a><span class="k">def</span> <span class="nf">nameColumns</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">numbColumns</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create list with the name of the columns</span>
+
+<span class="sd">    from the variables</span>
+<span class="sd">    :param name : Variable name</span>
+<span class="sd">    :param type : string</span>
+<span class="sd">    :param numbColumns : Number of columns</span>
+<span class="sd">    :param type: int</span>
+<span class="sd">    :return : list with the name of the columns</span>
+<span class="sd">    :return type: list string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">namesColumns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numbColumns</span><span class="p">):</span>
+        <span class="n">nColumn</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">namesColumns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nColumn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">namesColumns</span></div>
+
+
+<div class="viewcode-block" id="makeCsv"><a class="viewcode-back" href="../makeCsv.html#makeCsv.makeCsv">[docs]</a><span class="k">def</span> <span class="nf">makeCsv</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create .csv files of some variables that are in a NetCDF file,</span>
+
+<span class="sd">    the .cvs file is saved in the data/NetCDF path of the project</span>
+<span class="sd">    :param net : NetCDF file information</span>
+<span class="sd">    :param type: NetCDF type</span>
+<span class="sd">    :param date: initial date</span>
+<span class="sd">    :param type: string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;U10&#39;</span><span class="p">,</span> <span class="s1">&#39;V10&#39;</span><span class="p">,</span> <span class="s1">&#39;RAINC&#39;</span><span class="p">,</span> <span class="s1">&#39;T2&#39;</span><span class="p">,</span> <span class="s1">&#39;TH2&#39;</span><span class="p">,</span> <span class="s1">&#39;RAINNC&#39;</span><span class="p">,</span> <span class="s1">&#39;PBLH&#39;</span><span class="p">,</span> <span class="s1">&#39;SWDOWN&#39;</span><span class="p">,</span> <span class="s1">&#39;GLW&#39;</span><span class="p">]</span>
+
+    <span class="n">LON</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;XLONG&#39;</span><span class="p">][:]</span>
+    <span class="n">LAT</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;XLAT&#39;</span><span class="p">][:]</span>
+
+    <span class="n">LON</span> <span class="o">=</span> <span class="n">LON</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">LAT</span> <span class="o">=</span> <span class="n">LAT</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">LONsize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">LON</span><span class="p">)</span>
+    <span class="n">LATsize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">LAT</span><span class="p">)</span>
+
+    <span class="n">minlat</span> <span class="o">=</span> <span class="mf">19.4284700</span> <span class="c1">#19.8</span>
+    <span class="n">maxlat</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1">#-19.033333</span>
+    <span class="n">minlon</span> <span class="o">=</span> <span class="o">-</span><span class="mf">99.127660</span> <span class="c1">#-99.933333</span>
+    <span class="n">maxlon</span> <span class="o">=</span> <span class="o">-</span><span class="mi">98</span> <span class="c1">#99.366667</span>
+
+    <span class="n">celda</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">var_cut</span><span class="o">=</span><span class="p">[];</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="n">var</span><span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">][:]</span>
+        <span class="n">celda</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">var</span><span class="p">);</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">ne</span><span class="p">(</span><span class="n">var</span><span class="p">,</span><span class="n">LON</span><span class="p">,</span><span class="n">LAT</span><span class="p">,</span><span class="n">LONsize</span><span class="p">,</span><span class="n">LATsize</span><span class="p">,</span><span class="n">minlat</span><span class="p">,</span><span class="n">maxlat</span><span class="p">,</span><span class="n">minlon</span><span class="p">,</span><span class="n">maxlon</span><span class="p">);</span>
+        <span class="n">var_cut</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+
+    <span class="k">for</span> <span class="n">ls</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">var_cut</span><span class="p">)):</span>
+        <span class="n">saveData</span><span class="p">(</span><span class="n">var_cut</span><span class="p">[</span><span class="n">ls</span><span class="p">],</span><span class="n">variables</span><span class="p">[</span><span class="n">ls</span><span class="p">],</span><span class="n">date</span><span class="p">,</span><span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">);</span></div>
+
+
+<div class="viewcode-block" id="saveData"><a class="viewcode-back" href="../makeCsv.html#makeCsv.saveData">[docs]</a><span class="k">def</span> <span class="nf">saveData</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to save the information in a .csv file</span>
+
+<span class="sd">    :param var: information of NetCDF</span>
+<span class="sd">    :type var: NetCDF</span>
+<span class="sd">    :param variables: meteorological variables</span>
+<span class="sd">    :type variables: String</span>
+<span class="sd">    :param date: date of day</span>
+<span class="sd">    :type date: date</span>
+<span class="sd">    :param opt: option to save file</span>
+<span class="sd">    :type opt: int</span>
+<span class="sd">    :param path: address where it is saved in .cvs file</span>
+<span class="sd">    :type path: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dateVal</span> <span class="o">=</span> <span class="n">makeDates</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+    <span class="n">allData</span> <span class="o">=</span> <span class="n">makeDates</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+    <span class="c1"># temp = conver1D(var);</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">divData</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">dataMatrix</span> <span class="o">=</span> <span class="n">temp</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">variables</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+    <span class="n">myIndex</span> <span class="o">=</span> <span class="n">nameColumns</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">tempFrame</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataMatrix</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">myIndex</span><span class="p">)</span>
+    <span class="n">allData</span> <span class="o">=</span> <span class="n">concat</span><span class="p">([</span><span class="n">allData</span><span class="p">,</span> <span class="n">tempFrame</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">allData</span> <span class="o">=</span> <span class="n">allData</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">meanAllData</span> <span class="o">=</span> <span class="n">allData</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">meanValues</span> <span class="o">=</span> <span class="n">meanAllData</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">meanValues</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">variables</span> <span class="o">+</span> <span class="s1">&#39;_mean&#39;</span><span class="p">])</span>
+    <span class="n">dateVal</span><span class="p">[</span><span class="n">variables</span> <span class="o">+</span> <span class="s1">&#39;_mean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span>
+    <span class="k">if</span> <span class="n">opt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">allData</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">opt</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">filq</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="n">dateVal</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filq</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">opt</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">filq</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="n">allData</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filq</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="readCsv"><a class="viewcode-back" href="../makeCsv.html#makeCsv.readCsv">[docs]</a><span class="k">def</span> <span class="nf">readCsv</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">pathCsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to join the information of the variables in a single file</span>
+
+<span class="sd">    :param variables : netCDF4 file name</span>
+<span class="sd">    :type variables: string</span>
+<span class="sd">    :param path: address where it is saved in .cvs file</span>
+<span class="sd">    :type path: String</span>
+<span class="sd">    :param pathCsv: address of csv files</span>
+<span class="sd">    :type pathCsv: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># os.makedirs(&#39;../data/totalData/&#39;)</span>
+    <span class="n">dataVa</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span>
+    <span class="n">mypath</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="n">patron</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">variables</span> <span class="o">+</span> <span class="s1">&#39;_\d\d\d\d-\d\d-\d\d&#39;</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">base</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">filess</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">mypath</span><span class="p">,</span> <span class="n">topdown</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">filess</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filess</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">filess</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">patron</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tempData</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">mypath</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+                <span class="n">tempData</span> <span class="o">=</span> <span class="n">completeMet</span><span class="p">(</span><span class="n">tempData</span><span class="p">)</span>
+                <span class="n">tempData</span> <span class="o">=</span> <span class="n">tempData</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">24</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">dataVa</span> <span class="o">=</span> <span class="n">concat</span><span class="p">([</span><span class="n">tempData</span><span class="p">,</span> <span class="n">dataVa</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">dataVa</span> <span class="o">=</span> <span class="n">dataVa</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">dataVa</span> <span class="o">=</span> <span class="n">dataVa</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">dataVa</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">pathCsv</span> <span class="o">+</span> <span class="n">variables</span> <span class="o">+</span> <span class="s1">&#39;_total.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">dataVa</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="completeMet"><a class="viewcode-back" href="../makeCsv.html#makeCsv.completeMet">[docs]</a><span class="k">def</span> <span class="nf">completeMet</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to store the meteorological information in a dataframe</span>
+
+<span class="sd">    :param data: meteorology data</span>
+<span class="sd">    :type data: DataFrame</span>
+<span class="sd">    :return: DataFrame with information</span>
+<span class="sd">    :return type: DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fechaOri</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">newData</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([],</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">nameColumns</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">nameColumns</span> <span class="o">=</span> <span class="n">nameColumns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">fecha</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">fecha</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">fechaOri</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">dateInit</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="n">da</span> <span class="o">=</span> <span class="n">dateInit</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+        <span class="n">ti</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">fecha</span> <span class="o">==</span> <span class="n">ti</span><span class="p">]</span>
+        <span class="n">dtemp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">nameColumns</span><span class="p">]</span>
+        <span class="n">newData</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">newData</span><span class="p">,</span> <span class="n">dtemp</span><span class="p">])</span>
+    <span class="n">newData</span> <span class="o">=</span> <span class="n">newData</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">newData</span> <span class="o">=</span> <span class="n">newData</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">newData</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">fechas</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fechaOri</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">])</span>
+    <span class="n">fechas</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">newData</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">fechas</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">newData</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">fechas</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">newData</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="n">fechas</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span> <span class="o">=</span> <span class="n">newData</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">fechas</span></div>
+
+
+<div class="viewcode-block" id="open_netcdf"><a class="viewcode-back" href="../makeCsv.html#makeCsv.open_netcdf">[docs]</a><span class="k">def</span> <span class="nf">open_netcdf</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">nameFile</span><span class="p">,</span> <span class="n">cadena</span><span class="p">,</span> <span class="n">pathCopyData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to open a NetCDF file</span>
+
+<span class="sd">    :param ls: address file</span>
+<span class="sd">    :type ls: String</span>
+<span class="sd">    :param nameFile: file name</span>
+<span class="sd">    :type nameFile: String</span>
+<span class="sd">    :param cadena: name of the file without extension</span>
+<span class="sd">    :type cadena: String</span>
+<span class="sd">    :param pathCopyData: address to copy the file</span>
+<span class="sd">    :type pathCopyData: String</span>
+<span class="sd">    :return : data in NetCDF</span>
+<span class="sd">    :type return: NetCDF</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;.nc.tar.gz&#39;</span>
+    <span class="n">name1</span> <span class="o">=</span> <span class="s1">&#39;.nc.gz&#39;</span>
+    <span class="n">patron</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*&#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">patron2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;.*&#39;</span> <span class="o">+</span> <span class="n">name1</span><span class="p">)</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">pathCopyData</span> <span class="o">+</span> <span class="n">nameFile</span>
+    <span class="k">if</span> <span class="n">patron</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">nameFile</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">comp</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">cadena</span><span class="p">,</span> <span class="n">pathCopyData</span><span class="p">)</span>
+        <span class="n">comp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">pathCopyData</span> <span class="o">+</span> <span class="n">cadena</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pathCopyData</span> <span class="o">+</span> <span class="n">cadena</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">patron2</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">nameFile</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        <span class="n">infile</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span><span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span>
+        <span class="n">infile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span>
+    <span class="c1"># os.remove(fname);</span>
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="readFiles"><a class="viewcode-back" href="../makeCsv.html#makeCsv.readFiles">[docs]</a><span class="k">def</span> <span class="nf">readFiles</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">pathCopyData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to read all NetCDF files that are in the specified path</span>
+<span class="sd">    and named by the format Dom1_year-month-day.nc</span>
+
+<span class="sd">    :param opt: option to save data</span>
+<span class="sd">    :return opt: int</span>
+<span class="sd">    :param path: address file</span>
+<span class="sd">    :return path: String</span>
+<span class="sd">    :param pathCopyData: address to copy the file</span>
+<span class="sd">    :type pathCopyData: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="s1">&#39;\d\d\d\d-\d\d-\d\d&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;wrfout_d02_&#39;</span>
+    <span class="n">dirr</span> <span class="o">=</span> <span class="n">pathCopyData</span>
+    <span class="n">patron</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)</span>
+    <span class="n">patron2</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">date</span><span class="p">)</span>
+    <span class="n">tempfile</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tfile.txt&#39;</span><span class="p">)</span>
+    <span class="n">tempbase</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tbase.txt&#39;</span><span class="p">)</span>
+    <span class="n">tfile</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">tbase</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tempbase</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">tfileCopy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">tbaseCopy</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tempbase</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tfile</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+        <span class="n">tfil</span> <span class="o">=</span> <span class="n">tfile</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tbas</span> <span class="o">=</span> <span class="n">tbase</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ls</span> <span class="o">=</span> <span class="n">tbas</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">tfil</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">patron2</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">tfil</span><span class="p">)</span>
+        <span class="n">cadena</span> <span class="o">=</span> <span class="n">clearString</span><span class="p">(</span><span class="n">tfil</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">cadena</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">net</span> <span class="o">=</span> <span class="n">open_netcdf</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">tfil</span><span class="p">,</span> <span class="n">cadena</span><span class="p">,</span> <span class="n">pathCopyData</span><span class="p">)</span>
+            <span class="n">checkFile</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">tfil</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="n">tfileCopy</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tfil</span><span class="p">)</span>
+            <span class="n">tbaseCopy</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">tbas</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">EOFError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">fdata</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tfileCopy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nameFile&#39;</span><span class="p">])</span>
+            <span class="n">fbas</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">tbaseCopy</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nameBase&#39;</span><span class="p">])</span>
+            <span class="n">fdata</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tfile.txt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">fbas</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tbase.txt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">pathCopyData</span> <span class="o">+</span> <span class="n">cadena</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="c1"># readFiles(1);</span>
+        <span class="k">except</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">ReadError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;error2&#39;</span><span class="p">)</span>
+            <span class="c1"># fdata = df.DataFrame(tfile,columns=[&#39;nameFile&#39;]);</span>
+            <span class="c1"># fbas = df.DataFrame(tbase,columns=[&#39;nameBase&#39;]);</span>
+            <span class="c1"># fdata.to_csv(dirr+&#39;tfile.txt&#39;,encoding=&#39;utf-8&#39;,index=False);</span>
+            <span class="c1"># fbas.to_csv(dirr+&#39;tbase.txt&#39;,encoding=&#39;utf-8&#39;,index=False);</span>
+            <span class="c1"># readFiles(1);</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">EOFError</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ERROR DE LECTURA&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="totalFiles"><a class="viewcode-back" href="../makeCsv.html#makeCsv.totalFiles">[docs]</a><span class="k">def</span> <span class="nf">totalFiles</span><span class="p">(</span><span class="n">pathCopyData</span><span class="p">,</span> <span class="n">pathNetCDF</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to save the address of the netCDF in a txt file</span>
+
+<span class="sd">    :param pathCopyData: address to copy the file</span>
+<span class="sd">    :type pathCopyData: String</span>
+<span class="sd">    :param pathNetCDF: address where the net files are located</span>
+<span class="sd">    :type pathNetCDF: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dirr</span> <span class="o">=</span> <span class="n">pathCopyData</span>
+    <span class="n">dirr2</span> <span class="o">=</span> <span class="n">pathNetCDF</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;wrfout_d02_\d\d\d\d-\d\d-\d\d_00.nc&#39;</span>
+    <span class="n">fil</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ba</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">patron</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.*&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">base</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">dirr2</span><span class="p">,</span> <span class="n">topdown</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">patron</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">fil</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">ba</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fil</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nameFile&#39;</span><span class="p">])</span>
+    <span class="n">fbase</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ba</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;nameBase&#39;</span><span class="p">])</span>
+    <span class="n">fdata</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tfile.txt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fbase</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dirr</span> <span class="o">+</span> <span class="s1">&#39;tbase.txt&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="clearString"><a class="viewcode-back" href="../makeCsv.html#makeCsv.clearString">[docs]</a><span class="k">def</span> <span class="nf">clearString</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to remove the extension of a file</span>
+
+<span class="sd">    :param name: file name</span>
+<span class="sd">    :type name: String</span>
+<span class="sd">    :return: name file witout extension</span>
+<span class="sd">    :return type: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.tar&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tar&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="checkFile"><a class="viewcode-back" href="../makeCsv.html#makeCsv.checkFile">[docs]</a><span class="k">def</span> <span class="nf">checkFile</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to check if the file has</span>
+<span class="sd">    the requiered parameters.</span>
+<span class="sd">    </span>
+<span class="sd">    :param net : information that contains the file</span>
+<span class="sd">    :type net: Dataset</span>
+<span class="sd">    :param name: file name</span>
+<span class="sd">    :type name : string</span>
+<span class="sd">    :param date: date</span>
+<span class="sd">    :type date: string</span>
+<span class="sd">    :param opt: option</span>
+<span class="sd">    :type opt: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;XLONG&#39;</span><span class="p">][:]</span>
+        <span class="n">net</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;XLAT&#39;</span><span class="p">][:]</span>
+        <span class="n">makeCsv</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">opt</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;error in file: &#39;</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;data/NetCDF&#39;</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;data/NetCDF&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;data/totalData&#39;</span><span class="p">):</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;data/totalData&#39;</span><span class="p">)</span>
+<span class="c1"># totalFiles(pathCopyData, pathNetCDF);</span>
+<span class="c1"># readFiles(2, path, pathCopyData);</span>
+<span class="c1"># variables=[&#39;U10&#39;,&#39;V10&#39;,&#39;RAINC&#39;,&#39;T2&#39;, &#39;TH2&#39;, &#39;RAINNC&#39;, &#39;PBLH&#39;, &#39;SWDOWN&#39;, &#39;GLW&#39;];</span>
+<span class="c1"># for i in variables:</span>
+<span class="c1">#    print(i)</span>
+<span class="c1">#    readCsv(i, path, pathCsv);</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

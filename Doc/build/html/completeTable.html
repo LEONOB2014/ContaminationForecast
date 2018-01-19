@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>completeTable module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>completeTable module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,7 +21,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="makeCsv module" href="makeCsv.html" />
@@ -41,8 +40,115 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="completetable-module">
-<h1>completeTable module<a class="headerlink" href="#completetable-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-completeTable">
+<span id="completetable-module"></span><h1>completeTable module<a class="headerlink" href="#module-completeTable" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="completeTable.bootstrap">
+<code class="descclassname">completeTable.</code><code class="descname">bootstrap</code><span class="sig-paren">(</span><em>origin</em>, <em>save</em>, <em>nameContaminant</em>, <em>contaminant</em>, <em>est</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#bootstrap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.bootstrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to apply bootstrapt in a dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>origin</strong> – </li>
+<li><strong>save</strong> – </li>
+<li><strong>nameContaminant</strong> (<em>String</em>) – name of the pollutant in the database</li>
+<li><strong>est</strong> – name the station</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:type est : string
+:param contaminant: name the contaminant
+:type contaminant : string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="completeTable.copyComplete">
+<code class="descclassname">completeTable.</code><code class="descname">copyComplete</code><span class="sig-paren">(</span><em>estComplete</em>, <em>dirDataComp</em>, <em>dirDataSave</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#copyComplete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.copyComplete" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to copy files from one folder to another</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dirDataComp</strong> – file address</td>
+</tr>
+</tbody>
+</table>
+<p>:type dirDataComp : string
+:param dirDataSave: address where the files are saved
+:type dirDataSave: String
+:param contaminant: name the pollutant
+:type contaminant: String</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="completeTable.createFile">
+<code class="descclassname">completeTable.</code><code class="descname">createFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#createFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.createFile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="completeTable.maxAndMinValues">
+<code class="descclassname">completeTable.</code><code class="descname">maxAndMinValues</code><span class="sig-paren">(</span><em>data</em>, <em>station</em>, <em>contaminant</em>, <em>save</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#maxAndMinValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.maxAndMinValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to obtain the maximun and minumum values and save them in a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>DataFrame</em>) – DataFrame that contains the data from where the maximun ans minumum values will be extracted</li>
+<li><strong>station</strong> – name the station</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:type station : string
+:param contaminant: name the contaminant
+:type contaminant : string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="completeTable.originDir">
+<code class="descclassname">completeTable.</code><code class="descname">originDir</code><span class="sig-paren">(</span><em>dirDataComp</em>, <em>dirDataSave</em>, <em>nameContaminant</em>, <em>est</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#originDir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.originDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to send a list of function to apply bootstrap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dirDataComp</strong> – file address</td>
+</tr>
+</tbody>
+</table>
+<p>:type dirDataComp : string
+:param dirDataSave: address where the files are saved
+:type dirDataSave: String
+:param nameContaminant: name of the pollutant in the database
+:type nameContaminant: String
+:param est: name the station
+:type est: String
+:param contaminant: name the pollutant
+:type contaminant: String</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="completeTable.unionData">
+<code class="descclassname">completeTable.</code><code class="descname">unionData</code><span class="sig-paren">(</span><em>origin</em>, <em>save</em>, <em>est</em>, <em>estComplete</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/completeTable.html#unionData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#completeTable.unionData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to join the data of the netcdf and the data of the pollutants</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>dataFrame</em>) – DataFrame pollutants data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -78,7 +184,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/completeTable.rst.txt"

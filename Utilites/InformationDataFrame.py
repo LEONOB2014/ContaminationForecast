@@ -194,4 +194,4 @@ def colormap(name, est, nameColumn):
     plt.close()
 
 
-information()
+#information()

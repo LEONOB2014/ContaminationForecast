@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>makeDayCsv module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>makeDayCsv module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,7 +21,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="metricas module" href="metricas.html" />
@@ -41,8 +40,67 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="makedaycsv-module">
-<h1>makeDayCsv module<a class="headerlink" href="#makedaycsv-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-makeDayCsv">
+<span id="makedaycsv-module"></span><h1>makeDayCsv module<a class="headerlink" href="#module-makeDayCsv" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="makeDayCsv.fillTable">
+<code class="descclassname">makeDayCsv.</code><code class="descname">fillTable</code><span class="sig-paren">(</span><em>dataTemp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeDayCsv.html#fillTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeDayCsv.fillTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create the csv file with the holidays in the necessary format
+to add them to the other data of the neural network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dataTemp</strong> (<em>DataFrame</em>) – Information from the original cvs</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeDayCsv.hours24">
+<code class="descclassname">makeDayCsv.</code><code class="descname">hours24</code><span class="sig-paren">(</span><em>anio</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeDayCsv.html#hours24"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeDayCsv.hours24" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to put the value of a given date in each hour of the day</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anio</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – Value to repeat for 24 hours</td>
+</tr>
+</tbody>
+</table>
+<p>:return : int array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeDayCsv.make18">
+<code class="descclassname">makeDayCsv.</code><code class="descname">make18</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeDayCsv.html#make18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeDayCsv.make18" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function th create the holidays of the year 2018</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeDayCsv.makeDates">
+<code class="descclassname">makeDayCsv.</code><code class="descname">makeDates</code><span class="sig-paren">(</span><em>anio</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeDayCsv.html#makeDates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeDayCsv.makeDates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create the dates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anio</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – start year</td>
+</tr>
+</tbody>
+</table>
+<p>:return datetime array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeDayCsv.readCsv">
+<code class="descclassname">makeDayCsv.</code><code class="descname">readCsv</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeDayCsv.html#readCsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeDayCsv.readCsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create csv file with the holidays from 1996 to 2016 from another cvs file</p>
+</dd></dl>
+
 </div>
 
 
@@ -78,7 +136,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/makeDayCsv.rst.txt"

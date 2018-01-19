@@ -4,7 +4,7 @@ import pandas as df
 
 def normalize(data, station, contaminant, dirData):
     """
-    Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName
+     Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName
 
     :param data: data to normalize
     :type data: array
@@ -34,7 +34,7 @@ def normalize(data, station, contaminant, dirData):
 
 def desNorm(data, station, contaminant, dirData):
     """
-    function to denormalize a value
+     function to denormalize a value
 
     :param data: value to be unmasked
     :type data: float32
@@ -62,7 +62,7 @@ def desNorm(data, station, contaminant, dirData):
 
 def init_weight(shape):
     """
-    Function for the define Variable function weight
+     Function for the define Variable function weight
 
     :param shape: Matrix containing weight
     :type shape : matrix float32
@@ -74,7 +74,7 @@ def init_weight(shape):
 
 def init_bias(shape):
     """
-    Function for the define Variable function weight
+     Function for the define Variable function weight
 
     :param shape: Matrix containing bias
     :type shape : matrix float32
@@ -91,7 +91,7 @@ def fully_connected(input_layer, weight, biases):
 
 def prediction(station, contaminant, arrayPred, dirTrain, dirData):
     """
-    Function to obtain a prediction of a neural network that has
+     Function to obtain a prediction of a neural network that has
     already been trained previously
     
     :param station: station name for the prediction

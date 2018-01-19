@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>completeTable &#8212; Contamination Forecast 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for completeTable</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">df</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">est</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AJM&#39;</span><span class="p">,</span> <span class="s1">&#39;MGH&#39;</span><span class="p">,</span> <span class="s1">&#39;CCA&#39;</span><span class="p">,</span> <span class="s1">&#39;SFE&#39;</span><span class="p">,</span> <span class="s1">&#39;NEZ&#39;</span><span class="p">,</span> <span class="s1">&#39;CAM&#39;</span><span class="p">,</span> <span class="s1">&#39;LPR&#39;</span><span class="p">,</span> <span class="s1">&#39;SJA&#39;</span><span class="p">,</span> <span class="s1">&#39;IZT&#39;</span><span class="p">,</span> <span class="s1">&#39;SAG&#39;</span><span class="p">,</span> <span class="s1">&#39;TAH&#39;</span><span class="p">,</span><span class="s1">&#39;FAC&#39;</span><span class="p">,</span><span class="s1">&#39;CHO&#39;</span><span class="p">,</span><span class="s1">&#39;BJU&#39;</span><span class="p">,</span><span class="s1">&#39;UAX&#39;</span><span class="p">,</span><span class="s1">&#39;CUA&#39;</span><span class="p">,</span><span class="s1">&#39;ATI&#39;</span><span class="p">,</span><span class="s1">&#39;UIZ&#39;</span><span class="p">,</span><span class="s1">&#39;MER&#39;</span><span class="p">,</span><span class="s1">&#39;PED&#39;</span><span class="p">,</span><span class="s1">&#39;TLA&#39;</span><span class="p">,</span><span class="s1">&#39;XAL&#39;</span><span class="p">];</span>
+<span class="n">estComplete</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">dirDataComp</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data/DatosCP/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosLP/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosCC/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosLC/&#39;</span><span class="p">];</span>
+<span class="n">dirDataSave</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data/DatosCPB/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosLPB/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosCCB/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/DatosLCB/&#39;</span><span class="p">]</span>
+<span class="n">contaminant</span> <span class="o">=</span> <span class="s1">&#39;O3&#39;</span>
+<span class="n">nameContaminant</span> <span class="o">=</span> <span class="s1">&#39;cont_otres_&#39;</span>
+
+
+<div class="viewcode-block" id="originDir"><a class="viewcode-back" href="../completeTable.html#completeTable.originDir">[docs]</a><span class="k">def</span> <span class="nf">originDir</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">,</span> <span class="n">dirDataSave</span><span class="p">,</span> <span class="n">nameContaminant</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to send a list of function to apply bootstrap</span>
+
+<span class="sd">    :param dirDataComp: file address</span>
+<span class="sd">    :type dirDataComp : string</span>
+<span class="sd">    :param dirDataSave: address where the files are saved</span>
+<span class="sd">    :type dirDataSave: String</span>
+<span class="sd">    :param nameContaminant: name of the pollutant in the database</span>
+<span class="sd">    :type nameContaminant: String</span>
+<span class="sd">    :param est: name the station</span>
+<span class="sd">    :type est: String</span>
+<span class="sd">    :param contaminant: name the pollutant</span>
+<span class="sd">    :type contaminant: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">)):</span>
+        <span class="n">bootstrap</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">dirDataSave</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">nameContaminant</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">est</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="unionData"><a class="viewcode-back" href="../completeTable.html#completeTable.unionData">[docs]</a><span class="k">def</span> <span class="nf">unionData</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">save</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">estComplete</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to join the data of the netcdf and the data of the pollutants</span>
+
+<span class="sd">    :param data: DataFrame pollutants data</span>
+<span class="sd">    :type data: dataFrame</span>
+<span class="sd">    :return: dataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">est</span><span class="p">:</span>
+        <span class="n">dirData</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirData</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">xs</span> <span class="ow">in</span> <span class="n">estComplete</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+            <span class="n">dirSave</span> <span class="o">=</span> <span class="n">save</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+            <span class="n">dirComple</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">xs</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+            <span class="n">dataC</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirComple</span><span class="p">)</span>
+            <span class="n">dataC</span> <span class="o">=</span> <span class="n">dataC</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;weekday&#39;</span><span class="p">,</span> <span class="s1">&#39;sinWeekday&#39;</span><span class="p">,</span> <span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="s1">&#39;sinMonth&#39;</span><span class="p">,</span><span class="s1">&#39;day&#39;</span><span class="p">,</span><span class="s1">&#39;sinDay&#39;</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">dataC</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">maxAndMinValues</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">save</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">origin</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_pred.csv&#39;</span><span class="p">,</span> <span class="n">save</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;_pred.csv&#39;</span><span class="p">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dirSave</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="copyComplete"><a class="viewcode-back" href="../completeTable.html#completeTable.copyComplete">[docs]</a><span class="k">def</span> <span class="nf">copyComplete</span><span class="p">(</span><span class="n">estComplete</span><span class="p">,</span> <span class="n">dirDataComp</span><span class="p">,</span> <span class="n">dirDataSave</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to copy files from one folder to another</span>
+
+<span class="sd">    :param dirDataComp: file address</span>
+<span class="sd">    :type dirDataComp : string</span>
+<span class="sd">    :param dirDataSave: address where the files are saved</span>
+<span class="sd">    :type dirDataSave: String</span>
+<span class="sd">    :param contaminant: name the pollutant</span>
+<span class="sd">    :type contaminant: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">estComplete</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_pred.csv&#39;</span><span class="p">,</span> <span class="n">dirDataSave</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;_pred.csv&#39;</span><span class="p">);</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="n">dirDataSave</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">);</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">dirDataComp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_MaxMin.csv&#39;</span><span class="p">,</span><span class="n">dirDataSave</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;_MaxMin.csv&#39;</span><span class="p">);</span></div>
+
+
+<div class="viewcode-block" id="maxAndMinValues"><a class="viewcode-back" href="../completeTable.html#completeTable.maxAndMinValues">[docs]</a><span class="k">def</span> <span class="nf">maxAndMinValues</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">save</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to obtain the maximun and minumum values and save them in a file</span>
+
+<span class="sd">    :param data: DataFrame that contains the data from where the maximun ans minumum values will be extracted</span>
+<span class="sd">    :type data: DataFrame</span>
+<span class="sd">    :param station: name the station</span>
+<span class="sd">    :type station : string</span>
+<span class="sd">    :param contaminant: name the contaminant</span>
+<span class="sd">    :type contaminant : string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nameD</span> <span class="o">=</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_MaxMin&#39;</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+    <span class="n">Index</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+    <span class="n">myIndex</span> <span class="o">=</span> <span class="n">Index</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">myIndex</span> <span class="o">=</span> <span class="n">myIndex</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">x_vals</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x_vals</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x_vals</span> <span class="o">=</span> <span class="n">x_vals</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">minx</span> <span class="o">=</span> <span class="n">x_vals</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">maxx</span> <span class="o">=</span> <span class="n">x_vals</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">mixmax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MIN&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">myIndex</span><span class="p">)</span>
+    <span class="n">dMax</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;MAX&#39;</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">myIndex</span><span class="p">)</span>
+    <span class="n">mixmax</span><span class="p">[</span><span class="s1">&#39;MAX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dMax</span>
+    <span class="n">mixmax</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save</span> <span class="o">+</span> <span class="n">nameD</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bootstrap"><a class="viewcode-back" href="../completeTable.html#completeTable.bootstrap">[docs]</a><span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="n">save</span><span class="p">,</span> <span class="n">nameContaminant</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">est</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to apply bootstrapt in a dataframe</span>
+<span class="sd">    </span>
+<span class="sd">    :param origin:</span>
+<span class="sd">    :param save:</span>
+<span class="sd">    :param nameContaminant: name of the pollutant in the database</span>
+<span class="sd">    :type nameContaminant: String</span>
+<span class="sd">    :param est: name the station</span>
+<span class="sd">    :type est : string</span>
+<span class="sd">    :param contaminant: name the contaminant</span>
+<span class="sd">    :type contaminant : string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">est</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">origin</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">dirData</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+        <span class="n">dirPred</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_pred.csv&#39;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirData</span><span class="p">)</span>
+        <span class="n">pred</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirPred</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+        <span class="n">dataOzono</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">nameContaminant</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">dataOzono</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">dataOzono</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">dataBoot</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="n">nameContaminant</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">&gt;</span> <span class="n">std</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span> <span class="n">dataBoot</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">prediccion</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">])</span>
+        <span class="n">valPred</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">nameContaminant</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_delta&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">nameContaminant</span> <span class="o">+</span><span class="n">value</span><span class="o">+</span><span class="s1">&#39;_delta&#39;</span><span class="p">])</span>
+        <span class="n">prediccion</span><span class="p">[</span><span class="n">nameContaminant</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_delta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">valPred</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">nameContaminant</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span><span class="s1">&#39;_delta&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">prediccion</span> <span class="o">=</span> <span class="n">prediccion</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">prediccion</span> <span class="o">=</span> <span class="n">prediccion</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">maxAndMinValues</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">save</span><span class="p">)</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">prediccion</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">save</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;_pred.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="createFile"><a class="viewcode-back" href="../completeTable.html#completeTable.createFile">[docs]</a><span class="k">def</span> <span class="nf">createFile</span><span class="p">():</span>
+    <span class="n">est</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AJM&#39;</span><span class="p">,</span> <span class="s1">&#39;MGH&#39;</span><span class="p">,</span> <span class="s1">&#39;CCA&#39;</span><span class="p">,</span> <span class="s1">&#39;SFE&#39;</span><span class="p">,</span> <span class="s1">&#39;UAX&#39;</span><span class="p">,</span> <span class="s1">&#39;CUA&#39;</span><span class="p">,</span> <span class="s1">&#39;NEZ&#39;</span><span class="p">,</span> <span class="s1">&#39;CAM&#39;</span><span class="p">,</span> <span class="s1">&#39;LPR&#39;</span><span class="p">,</span> <span class="s1">&#39;SJA&#39;</span><span class="p">,</span> <span class="s1">&#39;CHO&#39;</span><span class="p">,</span> <span class="s1">&#39;IZT&#39;</span><span class="p">,</span> <span class="s1">&#39;SAG&#39;</span><span class="p">,</span> <span class="s1">&#39;TAH&#39;</span><span class="p">,</span><span class="s1">&#39;ATI&#39;</span><span class="p">,</span><span class="s1">&#39;FAC&#39;</span><span class="p">,</span><span class="s1">&#39;UIZ&#39;</span><span class="p">,</span><span class="s1">&#39;MER&#39;</span><span class="p">,</span><span class="s1">&#39;PED&#39;</span><span class="p">,</span><span class="s1">&#39;TLA&#39;</span><span class="p">,</span><span class="s1">&#39;BJU&#39;</span><span class="p">,</span><span class="s1">&#39;XAL&#39;</span><span class="p">];</span>
+    <span class="n">dirData</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;data/unionGeo/DatosCC/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/unionGeo/DatosLC/&#39;</span><span class="p">,</span> <span class="s1">&#39;data/unionGeo/DatosCP/&#39;</span><span class="p">,</span><span class="s1">&#39;data/unionGeo/DatosLP/&#39;</span><span class="p">];</span>
+    <span class="n">dirGraficas</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Graficas/Predicciones/unionGeo/GraficasCC/&#39;</span><span class="p">,</span> <span class="s1">&#39;Graficas/Predicciones/unionGeo/GraficasCP/&#39;</span><span class="p">,</span><span class="s1">&#39;Graficas/Predicciones/unionGeo/GraficasLC/&#39;</span><span class="p">,</span><span class="s1">&#39;Graficas/Predicciones/unionGeo/GraficasLP/&#39;</span><span class="p">];</span>
+    <span class="n">dirTrain</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;trainData/unionGeo/TrainCP/&#39;</span><span class="p">,</span> <span class="s1">&#39;trainData/unionGeo/TrainLP/&#39;</span><span class="p">,</span> <span class="s1">&#39;trainData/unionGeo/TrainCC/&#39;</span><span class="p">,</span><span class="s1">&#39;trainData/unionGeo/TrainLC/&#39;</span><span class="p">];</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dirData</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirData</span><span class="p">[</span><span class="n">val</span><span class="p">]):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirData</span><span class="p">[</span><span class="n">val</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirGraficas</span><span class="p">[</span><span class="n">val</span><span class="p">]):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirGraficas</span><span class="p">[</span><span class="n">val</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dirTrain</span><span class="p">[</span><span class="n">val</span><span class="p">]):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dirTrain</span><span class="p">[</span><span class="n">val</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">est</span><span class="p">)):</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">dirTrain</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">+</span> <span class="n">est</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+
+<span class="c1">#originDir(dirDataComp, dirDataSave, nameContaminant, est, contaminant)</span>
+<span class="c1">#copyComplete(estComplete, dirDataComp, dirDataSave, contaminant)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

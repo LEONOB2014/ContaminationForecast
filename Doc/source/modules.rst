@@ -6,4 +6,3 @@ NNSystem
 
    neuralNetwork
    neuralNetworkGpu
-   neuralNetworkGpuMax

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>prediction module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>prediction module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,9 +21,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="saveData module" href="saveData.html" />
+    <link rel="prev" title="makeCsv module" href="makeCsv.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -44,7 +45,8 @@
 <dl class="function">
 <dt id="prediction.desNorm">
 <code class="descclassname">prediction.</code><code class="descname">desNorm</code><span class="sig-paren">(</span><em>data</em>, <em>station</em>, <em>contaminant</em>, <em>dirData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prediction.html#desNorm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#prediction.desNorm" title="Permalink to this definition">¶</a></dt>
-<dd><p>function to denormalize a value</p>
+<dd><blockquote>
+<div>function to denormalize a value</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -69,7 +71,8 @@
 <dl class="function">
 <dt id="prediction.init_bias">
 <code class="descclassname">prediction.</code><code class="descname">init_bias</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prediction.html#init_bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#prediction.init_bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function for the define Variable function weight</p>
+<dd><blockquote>
+<div>Function for the define Variable function weight</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -85,7 +88,8 @@
 <dl class="function">
 <dt id="prediction.init_weight">
 <code class="descclassname">prediction.</code><code class="descname">init_weight</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prediction.html#init_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#prediction.init_weight" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function for the define Variable function weight</p>
+<dd><blockquote>
+<div>Function for the define Variable function weight</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -101,7 +105,8 @@
 <dl class="function">
 <dt id="prediction.normalize">
 <code class="descclassname">prediction.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>data</em>, <em>station</em>, <em>contaminant</em>, <em>dirData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prediction.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#prediction.normalize" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName</p>
+<dd><blockquote>
+<div>Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -117,8 +122,9 @@
 <dl class="function">
 <dt id="prediction.prediction">
 <code class="descclassname">prediction.</code><code class="descname">prediction</code><span class="sig-paren">(</span><em>station</em>, <em>contaminant</em>, <em>arrayPred</em>, <em>dirTrain</em>, <em>dirData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/prediction.html#prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#prediction.prediction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to obtain a prediction of a neural network that has
-already been trained previously</p>
+<dd><blockquote>
+<div>Function to obtain a prediction of a neural network that has</div></blockquote>
+<p>already been trained previously</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -145,6 +151,8 @@ already been trained previously</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="makeCsv.html" title="previous chapter">makeCsv module</a></li>
+      <li>Next: <a href="saveData.html" title="next chapter">saveData module</a></li>
   </ul></li>
 </ul>
 </div>
@@ -167,7 +175,7 @@ already been trained previously</p>
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/prediction.rst.txt"

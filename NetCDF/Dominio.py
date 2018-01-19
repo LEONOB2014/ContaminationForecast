@@ -3,7 +3,7 @@ import netCDF4 as nc4
 import NewBBOX as ne
 
 #net = Dataset('NewFile.nc');
-net = Dataset('/home/pablo/DATA/Dom1_2017-06-13.nc')
+#net = Dataset('/home/pablo/DATA/Dom1_2017-06-13.nc')
 
 variables=['Uat10','Vat10','PREC2'];
 
@@ -59,5 +59,5 @@ varlat[:] = newLAT;
 
 files.close();
 
-f=nc4.Dataset('NewFileVars.nc','r');
-print(f);
+#f=nc4.Dataset('NewFileVars.nc','r');
+#print(f);

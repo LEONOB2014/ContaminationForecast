@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>neuralNetwork module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>neuralNetwork module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,11 +21,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="neuralNetworkGpu module" href="neuralNetworkGpu.html" />
-    <link rel="prev" title="makeCsv module" href="makeCsv.html" />
+    <link rel="prev" title="NNSystem" href="modules.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,8 +40,52 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="neuralnetwork-module">
-<h1>neuralNetwork module<a class="headerlink" href="#neuralnetwork-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-neuralNetwork">
+<span id="neuralnetwork-module"></span><h1>neuralNetwork module<a class="headerlink" href="#module-neuralNetwork" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="neuralNetwork.init_bias">
+<code class="descclassname">neuralNetwork.</code><code class="descname">init_bias</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neuralNetwork.html#init_bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neuralNetwork.init_bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for the define Variable function weight</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – Matrix containing bias</td>
+</tr>
+</tbody>
+</table>
+<p>:type shape : matrix float32
+:return: matrix bias</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="neuralNetwork.init_weight">
+<code class="descclassname">neuralNetwork.</code><code class="descname">init_weight</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neuralNetwork.html#init_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neuralNetwork.init_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for the define Variable function weight</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – Matrix containing weight</td>
+</tr>
+</tbody>
+</table>
+<p>:type shape : matrix float32</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">matrix weight</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="neuralNetwork.train">
+<code class="descclassname">neuralNetwork.</code><code class="descname">train</code><span class="sig-paren">(</span><em>x_d</em>, <em>y_data</em>, <em>columns</em>, <em>iteraciones</em>, <em>station</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/neuralNetwork.html#train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#neuralNetwork.train" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
@@ -54,8 +97,10 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="makeCsv.html" title="previous chapter">makeCsv module</a></li>
+  <li><a href="modules.html">NNSystem</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">NNSystem</a></li>
       <li>Next: <a href="neuralNetworkGpu.html" title="next chapter">neuralNetworkGpu module</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -78,7 +123,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/neuralNetwork.rst.txt"

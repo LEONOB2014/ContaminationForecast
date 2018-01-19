@@ -156,5 +156,5 @@ def createFile():
                 os.makedirs(r)
 
 
-originDir(dirDataComp, dirDataSave, nameContaminant, est, contaminant)
-copyComplete(estComplete, dirDataComp, dirDataSave, contaminant)
+#originDir(dirDataComp, dirDataSave, nameContaminant, est, contaminant)
+#copyComplete(estComplete, dirDataComp, dirDataSave, contaminant)

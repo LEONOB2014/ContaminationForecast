@@ -1,15 +1,18 @@
-.. ContaminationForecast documentation master file, created by
-   sphinx-quickstart on Fri Jan 19 11:19:38 2018.
+.. Contamination Forecast documentation master file, created by
+   sphinx-quickstart on Fri Jan 19 13:24:12 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ContaminationForecast's documentation!
-=================================================
+Welcome to Contamination Forecast's documentation!
+==================================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   modules
+   oztools
+   sqlCont
    auto
    autoTraining
    automatic_System
@@ -17,18 +20,14 @@ Welcome to ContaminationForecast's documentation!
    makeCsv
    neuralNetwork
    neuralNetworkGpu
-   neuralNetworkGpuMax
    prediction
-   predictionMax
    saveData
    testPrediction
    total_bash
    FormatData
-   InformationDataFrame
    Utilites
    makeDayCsv
-   metricas
-   
+   metricas 	
 
 
 Indices and tables
