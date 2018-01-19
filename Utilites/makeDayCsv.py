@@ -26,6 +26,7 @@ def fillTable(dataTemp):
     """
     Function to create the csv file with the holidays in the necessary format
     to add them to the other data of the neural network.
+
     :param dataTemp: Information from the original cvs
     :type dataTemp: DataFrame
     :return: DataFrame
@@ -58,6 +59,7 @@ def fillTable(dataTemp):
 def hours24(anio):
     """
     Function to put the value of a given date in each hour of the day
+
     :param anio: Value to repeat for 24 hours
     :type anio: int
     :return : int array
@@ -73,6 +75,7 @@ def hours24(anio):
 def makeDates(anio):
     """
     Function to create the dates
+    
     :param anio: start year
     :type anio: int
     :return datetime array

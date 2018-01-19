@@ -22,6 +22,7 @@ pathNetCDF = '/DATA/WRF_Operativo/'
 def conver1D(array):
     """
     Function to convert an array to a list
+
     :param array: array with the data
     :type array = matrix float32
     :return : list with the data
@@ -43,6 +44,7 @@ def conver1D(array):
 def divData(data):
     """
     Function to divide the data matrix into 4 submatrices
+
     :param data: information of NetCDF
     :type data: NetCDF
     :return : 4 submatrices
@@ -83,6 +85,7 @@ def divData(data):
 def makeDates(date):
     """
     Function to create a list with the format year-month-day hours:minutes:seconds
+
     from 00 hours to 23 hours
     :param date : initial date
     :param type : string
@@ -103,6 +106,7 @@ def makeDates(date):
 def nameColumns(name,numbColumns):
     """
     Function to create list with the name of the columns
+
     from the variables
     :param name : Variable name
     :param type : string
@@ -121,6 +125,7 @@ def nameColumns(name,numbColumns):
 def makeCsv(net, date, opt, path):
     """
     Function to create .csv files of some variables that are in a NetCDF file,
+
     the .cvs file is saved in the data/NetCDF path of the project
     :param net : NetCDF file information
     :param type: NetCDF type
@@ -159,6 +164,7 @@ def makeCsv(net, date, opt, path):
 def saveData(var, variables, date, opt, path):
     """
     function to save the information in a .csv file
+
     :param var: information of NetCDF
     :type var: NetCDF
     :param variables: meteorological variables
@@ -197,6 +203,7 @@ def saveData(var, variables, date, opt, path):
 def readCsv(variables, path, pathCsv):
     """
     function to join the information of the variables in a single file
+
     :param variables : netCDF4 file name
     :type variables: string
     :param path: address where it is saved in .cvs file
@@ -226,6 +233,7 @@ def readCsv(variables, path, pathCsv):
 def completeMet(data):
     """
     function to store the meteorological information in a dataframe
+
     :param data: meteorology data
     :type data: DataFrame
     :return: DataFrame with information
@@ -259,6 +267,7 @@ def completeMet(data):
 def open_netcdf(ls, nameFile, cadena, pathCopyData):
     """
     Function to open a NetCDF file
+
     :param ls: address file
     :type ls: String
     :param nameFile: file name
@@ -301,6 +310,7 @@ def readFiles(opt, path, pathCopyData):
     """
     Function to read all NetCDF files that are in the specified path
     and named by the format Dom1_year-month-day.nc
+
     :param opt: option to save data
     :return opt: int
     :param path: address file
@@ -355,6 +365,7 @@ def readFiles(opt, path, pathCopyData):
 def totalFiles(pathCopyData, pathNetCDF):
     """
     Function to save the address of the netCDF in a txt file
+
     :param pathCopyData: address to copy the file
     :type pathCopyData: String
     :param pathNetCDF: address where the net files are located
@@ -380,6 +391,7 @@ def totalFiles(pathCopyData, pathNetCDF):
 def clearString(name):
     """
     function to remove the extension of a file
+
     :param name: file name
     :type name: String
     :return: name file witout extension
@@ -397,6 +409,7 @@ def checkFile(net, name, date, opt, path):
     """
     Function to check if the file has
     the requiered parameters.
+    
     :param net : information that contains the file
     :type net: Dataset
     :param name: file name

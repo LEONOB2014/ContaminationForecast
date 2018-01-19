@@ -65,6 +65,7 @@ def estImg():
 def anios(data):
     """
     function to extract the number of years of data that a dataframe
+
     :param data: DataFrame
     :type data: DataFrame
     :return: numbers of years
@@ -82,6 +83,7 @@ def anios(data):
 def nombreEst(station):
     """
     function that returns from the full name of a station
+
     :param station: abbreviation of the name of the station
     :type station: String
     :return: full name of the station
@@ -136,6 +138,7 @@ def nombreEst(station):
 def nameC(nameColumn):
     """
     function that returns from the abbreviation name of a columns
+
     :param station: full name of the column
     :type station: String
     :return: abbreviation name of the column
@@ -171,6 +174,7 @@ def nameC(nameColumn):
 def colormap(name, est, nameColumn):
     """
     function to create a heatmap
+    
     :param name: station name
     :type name: String
     :param est: station

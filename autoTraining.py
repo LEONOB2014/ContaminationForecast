@@ -6,6 +6,7 @@ import pandas as df
 def init_weight(shape):
     """
     Function for the define Variable function weight
+    
     :param shape: Matrix containing weight
     :type shape : matrix float32
     :return: matrix weight
@@ -17,6 +18,7 @@ def init_weight(shape):
 def init_bias(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing bias
     :type shape : matrix float32
     :return: matrix bias
@@ -33,6 +35,7 @@ def fully_connected(input_layer, weight, biases):
 def training(datax, build, estacion, dirTrain, contaminant, dirData):
     """
     function where the neural network is defined and trained
+
     :param x_d: Training data
     :type x_d: matrix float32
     :param y_data: predicction data (Training data)

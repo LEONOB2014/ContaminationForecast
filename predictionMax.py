@@ -6,6 +6,7 @@ import pandas as df
 def init_weight(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing weight
     :type shape : matrix float32
     :return: matrix weight
@@ -16,6 +17,7 @@ def init_weight(shape):
 def init_bias(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing bias
     :type shape : matrix float32
     :return: matrix bias
@@ -31,6 +33,7 @@ def prediction(station,contaminant,arrayPred,maxx):
     """
     Function to obtain a prediction of a neural network that has
     already been trained previously
+    
     :param station: station name for the prediction
     :type station: string
     :param contaminant: contaminant for the predictiondate

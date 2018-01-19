@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split #installl sklearn with pip 
 def init_weight(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing weight
     :type shape : matrix float32
 
@@ -19,6 +20,7 @@ def init_weight(shape):
 def init_bias(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing bias
     :type shape : matrix float32
     :return: matrix bias
@@ -31,6 +33,7 @@ def init_bias(shape):
 def train(x_d, y_data, columns, iteraciones, station, contaminant, dirTrain):
     """
     function where the neural network is defined and trained
+    
     :param x_d: Training data
     :type x_d: matrix float32
     :param y_data: predicction data (Training data)

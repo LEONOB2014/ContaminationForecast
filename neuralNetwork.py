@@ -44,6 +44,7 @@ size = len(x_vals_train);# The number of neurons in the first layer is equal to 
 def init_weight(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing weight
     :type shape : matrix float32
     :return: matrix weight
@@ -54,6 +55,7 @@ def init_weight(shape):
 def init_bias(shape):
     """
     Function for the define Variable function weight
+    
     :param shape: Matrix containing bias
     :type shape : matrix float32
     :return: matrix bias

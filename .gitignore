@@ -5,3 +5,6 @@ data/
 trainData/
 *.swp
 PM10/
+.ropeproject/
+Doc/
+*.pyc

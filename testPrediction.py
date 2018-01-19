@@ -18,6 +18,7 @@ metri = []
 def totalPredection(est, dirData, dirrDataC, dirGraficas, dirTrain, contaminant,columnContaminant, fechaInicio, fechaFin):
     """
     function to send to do the forecast of a station and graph it
+
     :param station: name the station
     :type station: String
     :param dirData: address of the files with training information
@@ -41,6 +42,7 @@ def totalPredection(est, dirData, dirrDataC, dirGraficas, dirTrain, contaminant,
 def trial(station, dirData, dirrDataC, dirGraficas, dirTrain, contaminant, columnContaminant, fechaInicio, fechaFin):
     """
     function to make the forecast of a whole year and graph it
+
     :param station: name the station
     :type station: String
     :param dirData: address of the files with training information
@@ -122,6 +124,7 @@ def trial(station, dirData, dirrDataC, dirGraficas, dirTrain, contaminant, colum
 def filterData(data, dirData):
     """
     function to remove the columns of a dataframe
+
     :param data: dataframe to which the columns will be removed
     :type data: DataFrame
     :param dirData: address of the files with training information
@@ -137,6 +140,7 @@ def filterData(data, dirData):
 def gError(real, pred, location, labels, station, dirGraficas):
     """
     function to graph the forecast error
+
     :param real: observed value
     :type real: array float32
     :param pred:caculated values
@@ -178,6 +182,7 @@ def gError(real, pred, location, labels, station, dirGraficas):
 def graSubPlot(obs, calcu, station, location, dirGraficas, labels):
     """
     function to graph the forecast given by the neural network
+
     :param obs: observed value
     :type obs: array float32
     :param calcu:caculated values
@@ -214,6 +219,7 @@ def graSubPlot(obs, calcu, station, location, dirGraficas, labels):
 def saveMetric(dirGraficas):
     """
     function to save the values obtained from the metrics
+
     :param dirGraficas: address where the graphics are saved
     :type dirGraficas: String
     """
@@ -240,6 +246,7 @@ def saveMetric(dirGraficas):
 def deMonth(m):
     """
     function to convert a number in the assigned month
+
     :param m: number of months
     :type m : int
     :return : name of the month
@@ -274,6 +281,7 @@ def deMonth(m):
 def xlabel(data):
     """
     function to take a date list for the axis of a graph
+
     :param data: dataframe with dates
     :type data: DataFrame
     """
@@ -298,6 +306,7 @@ def xlabel(data):
 def convert(data):
     """
     function to convert a matrix into an array
+
     :param data: matrix to convert
     :type param: matrix
     :return: array
@@ -315,6 +324,7 @@ def convert(data):
 def desNorm(data, station, contaminant, dirData, columnContaminant):
     """
     function to denormalize a value
+
     :param data: value to be unmasked
     :type data: float32
     :param station: name the stations
@@ -342,6 +352,7 @@ def desNorm(data, station, contaminant, dirData, columnContaminant):
 def nombreEst(station):
     """
     function that returns from the full name of a station
+
     :param station: abbreviation of the name of the station
     :type station: String
     :return: full name of the station
@@ -396,6 +407,7 @@ def nombreEst(station):
 def obtMax(station, contaminant, columnContaminant):
     """
     function to extract the maximum of a contaminant from a cvs file
+    
     :param station: name the station
     :type station: String
     :param contaminant: name the pollutant

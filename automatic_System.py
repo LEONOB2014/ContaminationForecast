@@ -14,6 +14,7 @@ def configuracion(variables):
     """
     function to extract the name of the NetCDF file from the current day and
     from a previous day
+
     :param Variable: meteorological variables
     :type variables: String list
     :return: list with the name of the files and the day
@@ -32,6 +33,7 @@ def configuracion(variables):
 def buscarArchivo(archivo, carpeta):
     """
     function to search a file in a defined folder
+
     :param archivo: file to search
     :type archivo: String
     :param carpeta: address where the file will be searched
@@ -49,6 +51,7 @@ def buscarArchivo(archivo, carpeta):
 def leerArchivo(informacion, estaciones, variables, dirNetCDF, dirCsv, dirData, dirTrain, dirFestivos, dataBackup, path, pathCopyData):
     """
     function for the automatic prediction of ozone
+
     :param informacion:name of netcdf and current date
     :type informacion: list
     :param estaciones: list with weather stations
@@ -186,6 +189,7 @@ def leerArchivo(informacion, estaciones, variables, dirNetCDF, dirCsv, dirData, 
 def prediccion(estacion, data, dirData, dirTrain):
     """
     function that sends the data to the neural network for the prediction of the pollutant
+
     :param estacion: name the station
     :type estacion: String
     :param data: information for the prediction
@@ -210,6 +214,7 @@ def prediccion(estacion, data, dirData, dirTrain):
 def convert(data):
     """
     function to convert a matrix into an array
+
     :param data: matrix to convert
     :type param: matrix
     :return: array
@@ -227,6 +232,7 @@ def convert(data):
 def baseContaminantes(fecha, estacion):
     """
     function to bring the information of the contaminants from the database
+
     :param fecha: date to bring the information
     :type fecha: date
     :param estacion:name of the station from which the information is extracted
@@ -242,6 +248,7 @@ def baseContaminantes(fecha, estacion):
 def training(fechaAyer, estacion, dirTrain, dirData, dirCsv, dirFestivos, variables):
     """
     function to train the neural network with the information of 24 hours before
+
     :param fechaAyer: date of the previous day
     :type fechaAyer: date
     :param estacion: name the station
@@ -280,6 +287,7 @@ def training(fechaAyer, estacion, dirTrain, dirData, dirCsv, dirFestivos, variab
 def unionMeteorologia(fecha, fechaComplete, dirCsv, variables):
     """
     function to join the information of the pollutants with the metrological
+
     :param fecha: current date
     :type fecha: date
     :param fechaComplete: current date complete
@@ -303,6 +311,7 @@ def unionMeteorologia(fecha, fechaComplete, dirCsv, variables):
 def convertDates(data):
     """
     function to convert a string into a date and save it in a dataframe
+
     :param data: dataframe with the dates to convert
     :type data : DataFrame
     :return: DataFrame
@@ -321,6 +330,7 @@ def convertDates(data):
 def unionData(data, fechaComplete, dirFestivos):
     """
     Function to join the data of the netcdf and the data of the pollutants
+
     :param data: DataFrame pollutants data
     :type data: dataFrame
     :return: dataFrame
@@ -339,6 +349,7 @@ def unionData(data, fechaComplete, dirFestivos):
 def guardarPrediccion(estacion, fecha, Valor):
     """
     function to save the prediction in the database
+
     :param estacion: name the station
     :type estacion: string
     :param fecha: current date
@@ -354,6 +365,7 @@ def guardarPrediccion(estacion, fecha, Valor):
 def filterData(data, dirData):
     """
     function to remove the columns of a dataframe
+
     :param data: dataframe to which the columns will be removed
     :type data: DataFrame
     :param dirData: address of the files with training information
@@ -374,6 +386,7 @@ def back(dirData):
 def numString(num):
     """
     function to convert a number of a digit into a string with two digits
+
     :param num:number to convert
     :type num: string
     :return : string with two digits
@@ -388,6 +401,7 @@ def numString(num):
 def deMonth(m):
     """
     function to convert a number in the assigned month
+
     :param m: number of months
     :type m : int
     :return : name of the month
@@ -422,6 +436,7 @@ def deMonth(m):
 def separateDate(data):
     """
     Function to separate the date in year, month ,day and the function sine of each one of them
+
     :parama data: DataFrame that contains the dates
     :type data: DataFrame
     """
@@ -471,6 +486,7 @@ def separateDate(data):
 def weekday(year,month,day):
     """
     Function to take day of the week using the congruence of Zeller , 1 is Sunday
+    
     :param year: year of the date
     :type year: int
     :param month: month of the date

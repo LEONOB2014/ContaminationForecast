@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as df
 import tensorflow as tf
-from sklearn.model_selection import train_test_split #installl sklearn with pip or anaconda
+from sklearn.model_selection import train_test_split
 
 
 def init_weight(shape):
     """
     Function for the define Variable function weight
+
     :param shape: Matrix containing weight
     :type shape : matrix float32
 
@@ -19,6 +20,7 @@ def init_weight(shape):
 def init_bias(shape):
     """
     Function for the define Variable function weight
+    
     :param shape: Matrix containing bias
     :type shape : matrix float32
     :return: matrix bias

@@ -11,6 +11,7 @@ def trainNeuralNetworks(est, dirr, dirTrain, fechaFinal, contaminant):
     """
     Function to train the neuralNetwork of the 23 stations,
     save the training on file trainData/[nameStation].csv
+
     :param est: name of the station to train
     :type est: string
     :param dirr : direction of training data

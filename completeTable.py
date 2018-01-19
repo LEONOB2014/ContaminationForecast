@@ -14,6 +14,7 @@ nameContaminant = 'cont_otres_'
 def originDir(dirDataComp, dirDataSave, nameContaminant, est, contaminant):
     """
     function to send a list of function to apply bootstrap
+
     :param dirDataComp: file address
     :type dirDataComp : string
     :param dirDataSave: address where the files are saved
@@ -32,6 +33,7 @@ def originDir(dirDataComp, dirDataSave, nameContaminant, est, contaminant):
 def unionData(origin, save, est, estComplete, contaminant):
     """
     Function to join the data of the netcdf and the data of the pollutants
+
     :param data: DataFrame pollutants data
     :type data: dataFrame
     :return: dataFrame
@@ -56,6 +58,7 @@ def unionData(origin, save, est, estComplete, contaminant):
 def copyComplete(estComplete, dirDataComp, dirDataSave, contaminant):
     """
     function to copy files from one folder to another
+
     :param dirDataComp: file address
     :type dirDataComp : string
     :param dirDataSave: address where the files are saved
@@ -73,6 +76,7 @@ def copyComplete(estComplete, dirDataComp, dirDataSave, contaminant):
 def maxAndMinValues(data, station, contaminant, save):
     """
     Function to obtain the maximun and minumum values and save them in a file
+
     :param data: DataFrame that contains the data from where the maximun ans minumum values will be extracted
     :type data: DataFrame
     :param station: name the station
@@ -99,6 +103,7 @@ def maxAndMinValues(data, station, contaminant, save):
 def bootstrap(origin, save, nameContaminant, contaminant, est):
     """
     function to apply bootstrapt in a dataframe
+    
     :param origin:
     :param save:
     :param nameContaminant: name of the pollutant in the database

@@ -14,6 +14,7 @@ class FormatData(object):
     def readData(startDate,endDate,estations,contaminant):
         """
         Function to extract information from the database.
+
         :param startDate: range of data wit wich the vaues of tue query are extracted.
         :type startDate: timedata
         :param endDate : range of data wit wich the vaues of tue query are extracted.
@@ -57,6 +58,7 @@ class FormatData(object):
     def buildClass(allData,estation,contaminant,delta):
         """
         Function so that every date in the allData table is added n hours and get the value that belongs to it.
+
         :param allData: is data extracted  the function readData
         :type allData: DataFrame.
         :param estation: station from wich the data will be taken.
@@ -110,6 +112,7 @@ class FormatData(object):
     def buildClass2(allData, estation, contaminant, delta, startDate, endDate):
         """
         Function so that every date in the allData table is added n hours and get the value that belongs to it.
+
         :param allData: is data extracted  the function readData
         :type allData: DataFrame.
         :param estation: station from wich the data will be taken.
@@ -152,6 +155,7 @@ class FormatData(object):
     def saveData(estacion, fecha, Valor):
         """
         function to save the prediction in the database
+        
         :param estacion: name of the station to which the prediction belongs
         :type estacion: string
         :param fecha: prediction date

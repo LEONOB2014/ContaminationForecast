@@ -15,6 +15,7 @@ dirTotalCsv = 'data/totalData/totalCuadrantes/'
 def saveData(listEstations, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant):
     """
     Function for the save data in the type file .csv
+
     :param listEstations: list with stations
     :type listEstations: String list
     :param startDate: start date
@@ -75,6 +76,7 @@ def saveData(listEstations, startDate, nameContaminant, endDate, dirr, dirTotalC
 def saveData2(listEstations, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant):
     """
     Function for the save data in the type file .csv
+
     :param listEstations: list with stations
     :type listEstations: String list
     :param startDate: start date
@@ -130,6 +132,7 @@ def saveData2(listEstations, startDate, nameContaminant, endDate, dirr, dirTotal
 def filterData(data, build):
     """
     function to remove the columns of a dataframe
+
     :param data: dataframe to which the columns will be removed
     :type data: DataFrame
     :param dirData: address of the files with training information
@@ -156,6 +159,7 @@ def createFile():
 def maxAndMinValues(data, station, contaminant, dirr):
     """
     Function to obtain the maximun and minumum values and save them in a file
+
     :param data: DataFrame that contains the data from where the maximun ans minumum values will be extracted
     :type data: DataFrame
     :param station: name the station
@@ -182,6 +186,7 @@ def maxAndMinValues(data, station, contaminant, dirr):
 def separateDate(data):
     """
     Function to separate the date in year, month ,day and the function sine of each one of them
+
     :parama data: DataFrame that contains the dates
     :type data: DataFrame
     """
@@ -231,6 +236,7 @@ def separateDate(data):
 def weekday(year, month, day):
     """
     Function to take day of the week using the congruence of Zeller , 1 is Sunday
+
     :param year: year of the date
     :type year: int
     :param month: month of the date
@@ -252,6 +258,7 @@ def weekday(year, month, day):
 def convertDates(data):
     """
     function to convert a string into a date and save it in a dataframe
+
     :param data: dataframe with the dates to convert
     :type data : DataFrame
     :return: DataFrame
@@ -270,6 +277,7 @@ def convertDates(data):
 def unionData(data, dirTotalCsv):
     """
     Function to join the data of the netcdf and the data of the pollutants
+    
     :param data:pataFrame(minollutants data
     :type data: dataFrame
     :return: dataFrame

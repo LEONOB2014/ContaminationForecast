@@ -4,6 +4,7 @@ import numpy as np
 def mape(real,obs):
     """
     Function to take the metric MAPE
+
     :param real: actual value of the pollutant
     :type real: matrix float32
     :param obs: value of the pollutant prediction
@@ -18,6 +19,7 @@ def mape(real,obs):
 def rmse(real, obs):
     """
     Function to take the metric RMSE
+
     :param real: actual value of the pollutant
     :type real: matrix float32
     :param obs: value of the pollutant prediction
@@ -32,6 +34,7 @@ def rmse(real, obs):
 def uTheils(real, obs):
     """
     Function to take the metric uTheils
+
     :param real: actual value of the pollutant
     :type real: matrix float32
     :param obs: value of the pollutant prediction
@@ -49,6 +52,7 @@ def uTheils(real, obs):
 def correla(real,obs):
     """
     Function to take the metric Correlation index
+
     :param real: actual value of the pollutant
     :type real: matrix float32
     :param obs: value of the pollutant prediction
@@ -66,6 +70,7 @@ def correla(real,obs):
 def agreement(real,obs):
     """
     Function to take the metric Agreement index
+
     :param real: actual value of the pollutant
     :type real:  matrix float32
     :param obs: value of the pollutant prediction
@@ -81,6 +86,7 @@ def agreement(real,obs):
 def metricas(real,obs,station):
     """
     Function to get the metrics of the forecast made by the neural network
+
     :param real: actual value of the pollutant
     :type real:  matrix float32
     :param obs: value of the pollutant prediction
