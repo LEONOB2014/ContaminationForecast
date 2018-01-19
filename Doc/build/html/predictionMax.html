@@ -1,0 +1,145 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>predictionMax module &#8212; ContaminationForecast 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-predictionMax">
+<span id="predictionmax-module"></span><h1>predictionMax module<a class="headerlink" href="#module-predictionMax" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="predictionMax.fully_connected">
+<code class="descclassname">predictionMax.</code><code class="descname">fully_connected</code><span class="sig-paren">(</span><em>input_layer</em>, <em>weight</em>, <em>biases</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/predictionMax.html#fully_connected"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#predictionMax.fully_connected" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="predictionMax.init_bias">
+<code class="descclassname">predictionMax.</code><code class="descname">init_bias</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/predictionMax.html#init_bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#predictionMax.init_bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for the define Variable function weight</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – Matrix containing bias</td>
+</tr>
+</tbody>
+</table>
+<p>:type shape : matrix float32
+:return: matrix bias</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="predictionMax.init_weight">
+<code class="descclassname">predictionMax.</code><code class="descname">init_weight</code><span class="sig-paren">(</span><em>shape</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/predictionMax.html#init_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#predictionMax.init_weight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for the define Variable function weight</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> – Matrix containing weight</td>
+</tr>
+</tbody>
+</table>
+<p>:type shape : matrix float32
+:return: matrix weight</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="predictionMax.prediction">
+<code class="descclassname">predictionMax.</code><code class="descname">prediction</code><span class="sig-paren">(</span><em>station</em>, <em>contaminant</em>, <em>arrayPred</em>, <em>maxx</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/predictionMax.html#prediction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#predictionMax.prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to obtain a prediction of a neural network that has
+already been trained previously</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>station</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) – station name for the prediction</li>
+<li><strong>contaminant</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) – contaminant for the predictiondate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return : value for the prediction</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/predictionMax.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

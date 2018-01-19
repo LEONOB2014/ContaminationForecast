@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>sqlCont module &#8212; ContaminationForecast 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sqlCont">
+<span id="sqlcont-module"></span><h1>sqlCont module<a class="headerlink" href="#module-sqlCont" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="sqlCont.SqlCont">
+<em class="property">class </em><code class="descclassname">sqlCont.</code><code class="descname">SqlCont</code><a class="reference internal" href="_modules/sqlCont.html#SqlCont"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains SQL methods to inserte, update and delete inside tables</p>
+<dl class="method">
+<dt id="sqlCont.SqlCont.clearTable">
+<code class="descname">clearTable</code><span class="sig-paren">(</span><em>conn</em>, <em>table</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.clearTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.clearTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes all the rows from the specified table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.delFromYear">
+<code class="descname">delFromYear</code><span class="sig-paren">(</span><em>year</em>, <em>tables</em>, <em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.delFromYear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.delFromYear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.getContaminantes">
+<code class="descname">getContaminantes</code><span class="sig-paren">(</span><em>conn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.getContaminantes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.getContaminantes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.getPostgresConn">
+<code class="descname">getPostgresConn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.getPostgresConn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.getPostgresConn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.insertIntoDB">
+<code class="descname">insertIntoDB</code><span class="sig-paren">(</span><em>fileName</em>, <em>conn</em>, <em>dateFormat</em>, <em>year</em>, <em>oztools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.insertIntoDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.insertIntoDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filling data into Database mode UNTIL 2011</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.insertIntoDBAfter2011">
+<code class="descname">insertIntoDBAfter2011</code><span class="sig-paren">(</span><em>fileName</em>, <em>conn</em>, <em>dateFormat</em>, <em>year</em>, <em>sqlCont</em>, <em>oztools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.insertIntoDBAfter2011"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.insertIntoDBAfter2011" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filling data into Database mode AFTER 2011</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.restartAllSeq">
+<code class="descname">restartAllSeq</code><span class="sig-paren">(</span><em>conn</em>, <em>tables</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.restartAllSeq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.restartAllSeq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="sqlCont.SqlCont.restartSeq">
+<code class="descname">restartSeq</code><span class="sig-paren">(</span><em>table</em>, <em>conn</em>, <em>cur</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sqlCont.html#SqlCont.restartSeq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sqlCont.SqlCont.restartSeq" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/sqlCont.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

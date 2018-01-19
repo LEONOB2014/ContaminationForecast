@@ -1,0 +1,229 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>prediction &#8212; ContaminationForecast 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for prediction</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">df</span>
+
+
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../prediction.html#prediction.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName</span>
+
+<span class="sd">    :param data: data to normalize</span>
+<span class="sd">    :type data: array</span>
+<span class="sd">    :param station : name station</span>
+<span class="sd">    :type station: string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirData</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_MaxMin.csv&#39;</span><span class="p">)</span>
+    <span class="n">maxx</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;MAX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">minn</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;MIN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">valNorm</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">norm</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxx</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">mi</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">minn</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">mi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mi</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="n">mi</span><span class="p">)</span>
+        <span class="n">valNorm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">norm</span><span class="p">))</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">valNorm</span></div>
+
+
+<div class="viewcode-block" id="desNorm"><a class="viewcode-back" href="../prediction.html#prediction.desNorm">[docs]</a><span class="k">def</span> <span class="nf">desNorm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to denormalize a value</span>
+
+<span class="sd">    :param data: value to be unmasked</span>
+<span class="sd">    :type data: float32</span>
+<span class="sd">    :param station: name the stations</span>
+<span class="sd">    :type station: String</span>
+<span class="sd">    :param contaminant: name the pollutant</span>
+<span class="sd">    :type contaminant: String</span>
+<span class="sd">    :param dirData: address of the files with training information</span>
+<span class="sd">    :type dirData: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">nameC</span> <span class="o">=</span> <span class="s1">&#39;cont_otres_&#39;</span> <span class="o">+</span> <span class="n">station</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="c1"># nameC= &#39;cont_otres&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirData</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_MaxMin.csv&#39;</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">va</span> <span class="o">=</span> <span class="n">values</span><span class="p">[(</span><span class="n">values</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="n">nameC</span><span class="p">)]</span>
+    <span class="n">maxx</span> <span class="o">=</span> <span class="n">va</span><span class="p">[</span><span class="s1">&#39;MAX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">minn</span> <span class="o">=</span> <span class="n">va</span><span class="p">[</span><span class="s1">&#39;MIN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">realVal</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">minn</span><span class="p">))</span> <span class="o">+</span> <span class="n">minn</span>
+        <span class="n">real</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">realVal</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">real</span></div>
+
+
+<div class="viewcode-block" id="init_weight"><a class="viewcode-back" href="../prediction.html#prediction.init_weight">[docs]</a><span class="k">def</span> <span class="nf">init_weight</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for the define Variable function weight</span>
+
+<span class="sd">    :param shape: Matrix containing weight</span>
+<span class="sd">    :type shape : matrix float32</span>
+<span class="sd">    :return: matrix weight</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">weight</span></div>
+
+
+<div class="viewcode-block" id="init_bias"><a class="viewcode-back" href="../prediction.html#prediction.init_bias">[docs]</a><span class="k">def</span> <span class="nf">init_bias</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for the define Variable function weight</span>
+
+<span class="sd">    :param shape: Matrix containing bias</span>
+<span class="sd">    :type shape : matrix float32</span>
+<span class="sd">    :return: matrix bias</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">random_normal</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">bias</span></div>
+
+
+<div class="viewcode-block" id="fully_connected"><a class="viewcode-back" href="../prediction.html#prediction.fully_connected">[docs]</a><span class="k">def</span> <span class="nf">fully_connected</span><span class="p">(</span><span class="n">input_layer</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">biases</span><span class="p">):</span>
+    <span class="n">layer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">input_layer</span><span class="p">,</span> <span class="n">weight</span><span class="p">),</span> <span class="n">biases</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="prediction"><a class="viewcode-back" href="../prediction.html#prediction.prediction">[docs]</a><span class="k">def</span> <span class="nf">prediction</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">arrayPred</span><span class="p">,</span> <span class="n">dirTrain</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to obtain a prediction of a neural network that has</span>
+<span class="sd">    already been trained previously</span>
+<span class="sd">    </span>
+<span class="sd">    :param station: station name for the prediction</span>
+<span class="sd">    :type station: string</span>
+<span class="sd">    :param contaminant: contaminant for the predictiondate</span>
+<span class="sd">    :type contaminant: string</span>
+<span class="sd">    :return : value for the prediction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;train_&#39;</span> <span class="o">+</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dirData</span> <span class="o">+</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">contaminant</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+    <span class="n">x_vals</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x_vals</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="s1">&#39;#x_vals= x_vals[:,1:columns];&#39;</span>
+
+    <span class="n">x_data</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">y_target</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">placeholder</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="s1">&#39;--------Create the first layer (size hidden nodes)--------&#39;</span>
+    <span class="c1"># TODO ya recibe todas las columnas en la primera capa</span>
+    <span class="n">weight_1</span> <span class="o">=</span> <span class="n">init_weight</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">bias_1</span> <span class="o">=</span> <span class="n">init_bias</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">layer_1</span> <span class="o">=</span> <span class="n">fully_connected</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">weight_1</span><span class="p">,</span> <span class="n">bias_1</span><span class="p">)</span>
+
+    <span class="s1">&#39;--------Create the second layeprint(size);--------&#39;</span>
+    <span class="n">weight_2</span> <span class="o">=</span> <span class="n">init_weight</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">bias_2</span> <span class="o">=</span> <span class="n">init_bias</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[(</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">layer_2</span> <span class="o">=</span> <span class="n">fully_connected</span><span class="p">(</span><span class="n">layer_1</span><span class="p">,</span> <span class="n">weight_2</span><span class="p">,</span> <span class="n">bias_2</span><span class="p">)</span>
+
+    <span class="s1">&#39;--------Create output layer (1 output value)--------&#39;</span>
+    <span class="n">weight_3</span> <span class="o">=</span> <span class="n">init_weight</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[(</span><span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">bias_3</span> <span class="o">=</span> <span class="n">init_bias</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">final_output</span> <span class="o">=</span> <span class="n">fully_connected</span><span class="p">(</span><span class="n">layer_2</span><span class="p">,</span> <span class="n">weight_3</span><span class="p">,</span> <span class="n">bias_3</span><span class="p">)</span>
+
+    <span class="c1"># Declare loss function (L1)</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">y_target</span> <span class="o">-</span> <span class="n">final_output</span><span class="p">))</span>
+
+    <span class="c1"># Declare optimizer gradientDescent</span>
+    <span class="c1"># my_opt = tf.train.GradientDescentOptimizer(0.1)</span>
+    <span class="n">my_opt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">AdamOptimizer</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">train_step</span> <span class="o">=</span> <span class="n">my_opt</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+        <span class="n">saver</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">Saver</span><span class="p">()</span>
+        <span class="n">saver</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sess</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">latest_checkpoint</span><span class="p">(</span><span class="n">dirTrain</span> <span class="o">+</span> <span class="n">station</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span><span class="p">))</span><span class="c1"># load training</span>
+        <span class="c1"># print(sess.run(final_output, feed_dict={x_data:values}));</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arrayPred</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">sess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">final_output</span><span class="p">,</span> <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">x_data</span><span class="p">:</span> <span class="n">x</span><span class="p">})</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">sess</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

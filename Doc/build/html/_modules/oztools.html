@@ -1,0 +1,184 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>oztools &#8212; ContaminationForecast 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for oztools</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding=utf-8</span>
+<div class="viewcode-block" id="ContIOTools"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools">[docs]</a><span class="k">class</span> <span class="nc">ContIOTools</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; This class contains helper methods to manipulate dates, get names for tables and read files by year&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor of the class&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ContIOTools.getCSVfiles"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getCSVfiles">[docs]</a>    <span class="k">def</span> <span class="nf">getCSVfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mypath</span><span class="p">,</span><span class="n">fromY</span><span class="p">,</span> <span class="n">toY</span><span class="p">):</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">fromY</span><span class="p">,</span><span class="n">toY</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+            <span class="n">currFile</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/contaminantes_</span><span class="si">%s</span><span class="s2">.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mypath</span><span class="p">,</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">currFile</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">files</span></div>
+
+<div class="viewcode-block" id="ContIOTools.getMeteoFiles"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getMeteoFiles">[docs]</a>    <span class="k">def</span> <span class="nf">getMeteoFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mypath</span><span class="p">,</span><span class="n">fromY</span><span class="p">,</span> <span class="n">toY</span><span class="p">):</span>
+        <span class="n">years</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">fromY</span><span class="p">,</span><span class="n">toY</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">years</span><span class="p">:</span>
+            <span class="n">currFile</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">/meteorología_</span><span class="si">%s</span><span class="s2">.csv&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mypath</span><span class="p">,</span><span class="n">year</span><span class="p">)</span>
+            <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">currFile</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">files</span></div>
+
+<div class="viewcode-block" id="ContIOTools.getMeteoTables"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getMeteoTables">[docs]</a>    <span class="k">def</span> <span class="nf">getMeteoTables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;met_tmp&#39;</span><span class="p">,</span><span class="s1">&#39;met_rh&#39;</span><span class="p">,</span><span class="s1">&#39;met_wsp&#39;</span><span class="p">,</span><span class="s1">&#39;met_wdr&#39;</span><span class="p">,</span><span class="s1">&#39;met_pba&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ContIOTools.getTables"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getTables">[docs]</a>    <span class="k">def</span> <span class="nf">getTables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;cont_pmco&#39;</span><span class="p">,</span><span class="s1">&#39;cont_pmdoscinco&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_nox&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_codos&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_co&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_nodos&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_no&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_otres&#39;</span> <span class="p">,</span><span class="s1">&#39;cont_sodos&#39;</span><span class="p">,</span> <span class="s1">&#39;cont_pmdiez&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ContIOTools.getContaminants"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getContaminants">[docs]</a>    <span class="k">def</span> <span class="nf">getContaminants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;pmco&#39;</span><span class="p">,</span><span class="s1">&#39;pm2&#39;</span> <span class="p">,</span><span class="s1">&#39;nox&#39;</span> <span class="p">,</span><span class="s1">&#39;co2&#39;</span> <span class="p">,</span><span class="s1">&#39;co&#39;</span> <span class="p">,</span><span class="s1">&#39;no2&#39;</span> <span class="p">,</span><span class="s1">&#39;no&#39;</span> <span class="p">,</span><span class="s1">&#39;o3&#39;</span> <span class="p">,</span><span class="s1">&#39;so2&#39;</span><span class="p">,</span> <span class="s1">&#39;pm10&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ContIOTools.getMeteoParams"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.getMeteoParams">[docs]</a>    <span class="k">def</span> <span class="nf">getMeteoParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;tmp&#39;</span><span class="p">,</span><span class="s1">&#39;rh&#39;</span><span class="p">,</span><span class="s1">&#39;wsp&#39;</span><span class="p">,</span><span class="s1">&#39;wdr&#39;</span><span class="p">,</span><span class="s1">&#39;pba&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ContIOTools.findTable"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.findTable">[docs]</a>    <span class="k">def</span> <span class="nf">findTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fileName</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;PM2.5&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_pmdoscinco&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;PM10&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_pmdiez&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;NOX&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_nox&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;CO2&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_codos&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;PMCO&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_pmco&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;CO&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_co&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;NO2&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_nodos&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;NO&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_no&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;O3&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_otres&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;SO2&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;cont_sodos&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;TMP&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;met_tmp&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;RH&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;met_rh&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;WSP&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;met_wsp&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;WDR&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;met_wdr&quot;</span>
+
+        <span class="k">if</span> <span class="s2">&quot;PBA&quot;</span> <span class="ow">in</span> <span class="n">fileName</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;met_pba&quot;</span></div>
+
+
+<div class="viewcode-block" id="ContIOTools.findDateFormat"><a class="viewcode-back" href="../oztools.html#oztools.ContIOTools.findDateFormat">[docs]</a>    <span class="k">def</span> <span class="nf">findDateFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">fileName</span><span class="p">):</span>
+        <span class="s2">&quot;Obtains the date format&quot;</span>
+        <span class="n">firstData</span> <span class="o">=</span> <span class="mi">11</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()[</span><span class="mi">11</span><span class="p">:]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">allDate</span> <span class="o">=</span> <span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="c1">#print allDate</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">allDate</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;DD/MM/YYY/HH24&quot;</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">allDate</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">12</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s2">&quot;MM/DD/YYY/HH24&quot;</span>
+                    <span class="k">break</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
