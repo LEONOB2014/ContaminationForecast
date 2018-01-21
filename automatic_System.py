@@ -505,7 +505,7 @@ def weekday(year,month,day):
     return [week,sinWeek]
 
 
-dirNetCDF = '/DATA/WRF_Operativo/2017/'  # direccion de los archivos NetCDF
+dirNetCDF = '/DATA/WRF_Operativo/2018/'  # direccion de los archivos NetCDF
 # dirCsv = '/data/totalData/totalCuadrantes/';
 dirCsv = '/home/pablo/DATA/DataCuadrantes/'  # direccion de los archivos creados apartir de los NetCDF
 dirData = '/home/pablo/PollutionForecast/ContaminationForecast/data/DatosLCB/'; #Direccion de datos de entrenamiento
@@ -514,7 +514,7 @@ dirFestivos = '/home/pablo/PollutionForecast/ContaminationForecast/data/Festivos
 estaciones = ['AJM', 'MGH', 'CCA', 'SFE', 'UAX', 'CUA', 'NEZ', 'CAM', 'LPR', 'SJA', 'IZT', 'SAG', 'TAH', 'ATI', 'FAC', 'UIZ', 'MER', 'PED', 'TLA', 'XAL', 'CHO', 'BJU']
 variables = ['V10', 'RAINC', 'T2', 'TH2', 'RAINNC', 'PBLH', 'SWDOWN', 'GLW']
 pathCopyData = '../data/NetCDF'
-path = '/home/pablo/DATA/DataCuadrantes'
+path = '/home/pablo/DATA/DataCuadrantes/'
 dataBackup = df.DataFrame
 information = configuracion(variables)
 # nameNetcdf = "wrfout_d02_"
