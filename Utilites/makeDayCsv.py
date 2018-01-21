@@ -32,7 +32,6 @@ def fillTable(dataTemp):
     :return: DataFrame
     """
     column = dataTemp.columns;
-    #print(anio.values);
     value = column[0];
     valAnio = dataTemp[value]
     anioC = hours24(valAnio.values);
@@ -119,4 +118,3 @@ def make18():
     dataC.to_csv('../data/Festivos.csv', encoding='utf-8',index=False);
 
 make18();
-#readCsv();

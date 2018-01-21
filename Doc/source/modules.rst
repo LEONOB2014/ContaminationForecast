@@ -1,9 +1,13 @@
-NNSystem
+Utilites
 ========
 
 .. toctree::
    :maxdepth: 4
 
-   neuralNetwork
-   neuralNetworkGpu
-   neuralNetworkGpuMax
+   FormatData
+   InformationDataFrame
+   Utilites
+   makeDayCsv
+   metricas
+   oztools
+   sqlCont

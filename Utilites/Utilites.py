@@ -12,7 +12,6 @@ def converToArray(alldata,contaminant):
     :param contaminant: Name of pollutant to look for
     :type contaminant: string
     :return: column with all data of the pollutant
-    :rtype; float32
     """
     oztool = ContIOTools()
     name = oztool.findTable(contaminant)
@@ -41,7 +40,6 @@ def prepro(data,build,contaminant):
     :param build: training data
     :param contaminant: name of the contaminant
     :return : normalize data
-    :type return: list
     """
     x_vals = data.values;
     x = x_vals.shape;
@@ -66,7 +64,6 @@ def prepro2(data,build,contaminant):
     :param build: training data
     :param contaminant: name of the contaminant
     :return : normalize data
-    :type return: list
     """
     x_vals = data.values;
     x = x_vals.shape;

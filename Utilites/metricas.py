@@ -10,7 +10,6 @@ def mape(real,obs):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: MAPE
-    : type return: float32
     """
     err = np.sum(np.abs((obs -  real)/ np.abs(obs)));
     return  err*(100/len(real));
@@ -25,7 +24,6 @@ def rmse(real, obs):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: RMSE
-    : type return: float32
     """
     error = np.sqrt(np.mean((obs-real)**2))
     return error;
@@ -40,7 +38,6 @@ def uTheils(real, obs):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: uTheils
-    : type return: float32
     """
     n = len(real)
     sqError = np.square(obs -real).sum();
@@ -58,7 +55,6 @@ def correla(real,obs):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: Correlation index
-    : type return: float32
     """
     medReal = np.mean(real)
     medObs = np.mean(obs);
@@ -76,7 +72,6 @@ def agreement(real,obs):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: Agreement index
-    : type return: float32
     """
     frac =  np.mean(np.square(obs - real))
     req = np.mean(np.abs(obs - np.mean(obs)) + np.abs(np.square(real - np.mean(real))));
@@ -92,7 +87,6 @@ def metricas(real,obs,station):
     :param obs: value of the pollutant prediction
     :type obs: matrix float32
     :return: DataFrame
-    : type return: DataFrame
     """
     met = [];
     if len(real) == 0:

@@ -52,7 +52,6 @@
 <span class="sd">    :param obs: value of the pollutant prediction</span>
 <span class="sd">    :type obs: matrix float32</span>
 <span class="sd">    :return: MAPE</span>
-<span class="sd">    : type return: float32</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">obs</span> <span class="o">-</span>  <span class="n">real</span><span class="p">)</span><span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">obs</span><span class="p">)));</span>
     <span class="k">return</span>  <span class="n">err</span><span class="o">*</span><span class="p">(</span><span class="mi">100</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">real</span><span class="p">));</span></div>
@@ -82,7 +81,6 @@
 <span class="sd">    :param obs: value of the pollutant prediction</span>
 <span class="sd">    :type obs: matrix float32</span>
 <span class="sd">    :return: uTheils</span>
-<span class="sd">    : type return: float32</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
     <span class="n">sqError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">obs</span> <span class="o">-</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">();</span>
@@ -100,7 +98,6 @@
 <span class="sd">    :param obs: value of the pollutant prediction</span>
 <span class="sd">    :type obs: matrix float32</span>
 <span class="sd">    :return: Correlation index</span>
-<span class="sd">    : type return: float32</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">medReal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">real</span><span class="p">)</span>
     <span class="n">medObs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">obs</span><span class="p">);</span>
@@ -118,7 +115,6 @@
 <span class="sd">    :param obs: value of the pollutant prediction</span>
 <span class="sd">    :type obs: matrix float32</span>
 <span class="sd">    :return: Agreement index</span>
-<span class="sd">    : type return: float32</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frac</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">obs</span> <span class="o">-</span> <span class="n">real</span><span class="p">))</span>
     <span class="n">req</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">obs</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">obs</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">real</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">real</span><span class="p">))));</span>
@@ -134,7 +130,6 @@
 <span class="sd">    :param obs: value of the pollutant prediction</span>
 <span class="sd">    :type obs: matrix float32</span>
 <span class="sd">    :return: DataFrame</span>
-<span class="sd">    : type return: DataFrame</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">met</span> <span class="o">=</span> <span class="p">[];</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">real</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
