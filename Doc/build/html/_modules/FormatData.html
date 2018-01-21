@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>FormatData &#8212; Contamination Forecast 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for FormatData</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">sqlCont</span> <span class="k">import</span> <span class="n">SqlCont</span>
+<span class="kn">from</span> <span class="nn">oztools</span> <span class="k">import</span> <span class="n">ContIOTools</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<div class="viewcode-block" id="FormatData"><a class="viewcode-back" href="../FormatData.html#FormatData.FormatData">[docs]</a><span class="k">class</span> <span class="nc">FormatData</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;docstring for FormatData&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor of the class&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FormatData.readData"><a class="viewcode-back" href="../FormatData.html#FormatData.FormatData.readData">[docs]</a>    <span class="k">def</span> <span class="nf">readData</span><span class="p">(</span><span class="n">startDate</span><span class="p">,</span><span class="n">endDate</span><span class="p">,</span><span class="n">estations</span><span class="p">,</span><span class="n">contaminant</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to extract information from the database.</span>
+
+<span class="sd">        :param startDate: range of data wit wich the vaues of tue query are extracted.</span>
+<span class="sd">        :type startDate: timedata</span>
+<span class="sd">        :param endDate : range of data wit wich the vaues of tue query are extracted.</span>
+<span class="sd">        :type endDate: timedata</span>
+<span class="sd">        :param estations: set the stations to get the values.</span>
+<span class="sd">        :type estations : list with the stations</span>
+<span class="sd">        :return : allData  all data that was taken from the database.</span>
+<span class="sd">        :rtype: DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">oztool</span> <span class="o">=</span> <span class="n">ContIOTools</span><span class="p">();</span>
+        <span class="n">tables_contaminants</span> <span class="o">=</span> <span class="n">oztool</span><span class="o">.</span><span class="n">getTables</span><span class="p">();</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="n">oztool</span><span class="o">.</span><span class="n">findTable</span><span class="p">(</span><span class="n">contaminant</span><span class="p">)</span>
+        <span class="n">conexion</span> <span class="o">=</span> <span class="n">SqlCont</span><span class="p">();</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">conexion</span><span class="o">.</span><span class="n">getPostgresConn</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">();</span>
+        <span class="c1">#conexion for the database</span>
+        <span class="n">allData</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;SELECT fecha FROM </span><span class="si">{0}</span><span class="s2"> WHERE id_est =&#39;</span><span class="si">{1}</span><span class="s2">&#39; AND fecha &gt;= &#39;</span><span class="si">{2}</span><span class="s2">&#39; AND fecha &lt;= &#39;</span><span class="si">{3}</span><span class="s2">&#39; ORDER BY fecha ASC;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cont</span><span class="p">,</span><span class="n">estations</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">),</span> <span class="n">conn</span><span class="p">);</span>
+        <span class="c1">#query the dates in the gives range</span>
+        <span class="n">numberows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">allData</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="c1">#Numbers the data given by the previous query</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">estations</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">tables_contaminants</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">y</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">x</span><span class="p">;</span> <span class="c1">#name the column in the DataFrame</span>
+                <span class="n">tempDataValues</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;SELECT fecha, val  as </span><span class="si">{0}</span><span class="s2"> FROM </span><span class="si">{1}</span><span class="s2"> WHERE id_est = &#39;</span><span class="si">{2}</span><span class="s2">&#39; AND fecha &gt;= &#39;</span><span class="si">{3}</span><span class="s2">&#39; AND fecha &lt;= &#39;</span><span class="si">{4}</span><span class="s2">&#39;ORDER BY fecha ASC;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">,</span> <span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">),</span><span class="n">conn</span><span class="p">);</span>
+                <span class="c1">#query the values in the gives rangefrom Utilites.FormatData import FormatData as fdfrom Utilites.FormatData import FormatData as fd</span>
+                <span class="k">if</span> <span class="n">tempDataValues</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="c1">#if the query is empty fill it will -1</span>
+                    <span class="c1">#tempData = pd.DataFrame(np.ones((numberows,1))*-1,columns= [name]);</span>
+                    <span class="c1">#allData[name]= tempData;</span>
+                    <span class="k">pass</span><span class="p">;</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="n">tempDataValues</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                    <span class="n">allData</span> <span class="o">=</span> <span class="n">allData</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">tempDataValues</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">)</span>
+                    <span class="c1">#allData[name]=tempDataValues[y+&#39;_&#39;+x.lower()];</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        <span class="c1">#The connection to the database is closed</span>
+        <span class="c1">#allData=allData.dropna(how = &#39;any&#39;);</span>
+        <span class="c1">#return allData.fillna(value=-1);</span>
+        <span class="k">return</span> <span class="n">allData</span><span class="p">;</span></div>
+
+
+<div class="viewcode-block" id="FormatData.buildClass"><a class="viewcode-back" href="../FormatData.html#FormatData.FormatData.buildClass">[docs]</a>    <span class="k">def</span> <span class="nf">buildClass</span><span class="p">(</span><span class="n">allData</span><span class="p">,</span><span class="n">estation</span><span class="p">,</span><span class="n">contaminant</span><span class="p">,</span><span class="n">delta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function so that every date in the allData table is added n hours and get the value that belongs to it.</span>
+
+<span class="sd">        :param allData: is data extracted  the function readData</span>
+<span class="sd">        :type allData: DataFrame.</span>
+<span class="sd">        :param estation: station from wich the data will be taken.</span>
+<span class="sd">        :type estation: string.</span>
+<span class="sd">        :param contaminant: contaminant from wich the data will be taken.</span>
+<span class="sd">        :type contaminant: string.</span>
+<span class="sd">        :param delta : number of hours added to the original.</span>
+<span class="sd">        :type delta: int, float</span>
+<span class="sd">        :return: build</span>
+<span class="sd">        :rtype: DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">oztool</span> <span class="o">=</span> <span class="n">ContIOTools</span><span class="p">();</span>
+        <span class="n">conexion</span> <span class="o">=</span> <span class="n">SqlCont</span><span class="p">();</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">conexion</span><span class="o">.</span><span class="n">getPostgresConn</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">();</span>
+        <span class="c1">#conexion database</span>
+        <span class="n">tableContaminant</span> <span class="o">=</span> <span class="n">oztool</span><span class="o">.</span><span class="n">findTable</span><span class="p">(</span><span class="n">contaminant</span><span class="p">);</span><span class="c1"># name the contaminant in the database</span>
+        <span class="n">fechas</span> <span class="o">=</span> <span class="n">allData</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span>
+        <span class="n">build</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fechas</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]);</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">build</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">cont</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="c1">#building the DataFrame, the first column is the date</span>
+        <span class="n">x</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">xv</span> <span class="ow">in</span> <span class="n">estation</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">tableContaminant</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">xv</span> <span class="o">+</span> <span class="s1">&#39;_delta&#39;</span><span class="p">;</span><span class="c1">#name the column in the DataFrame</span>
+            <span class="k">while</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">cont</span> <span class="p">:</span>
+                <span class="c1">#Construction of the second column having the pollutant value</span>
+                <span class="n">time</span><span class="o">=</span><span class="n">build</span><span class="o">.</span><span class="n">ix</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;fecha&#39;</span><span class="p">];</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="n">time</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">delta</span><span class="p">);</span><span class="c1">#You add the delta to the date</span>
+                <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT val FROM </span><span class="si">{0}</span><span class="s2"> WHERE id_est =&#39;</span><span class="si">{1}</span><span class="s2">&#39; AND fecha =&#39;</span><span class="si">{2}</span><span class="s2">&#39;;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tableContaminant</span><span class="p">,</span><span class="n">xv</span><span class="p">,</span><span class="n">time</span><span class="p">);</span>
+                <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">);</span>
+                <span class="n">temp</span><span class="o">=</span><span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">();</span>
+                <span class="n">tempValue</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tempValue</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="c1">#If the query is empty it puts -1 in the value of the column</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">tempValue</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">];</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">values</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">;</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+                <span class="n">temBuild</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">name</span><span class="p">]);</span>
+            <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="n">build</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span> <span class="n">temBuild</span><span class="p">;</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        <span class="c1">#The connection to the database is closed</span>
+        <span class="n">build</span><span class="o">.</span><span class="n">dropna</span><span class="p">();</span>
+        <span class="k">return</span> <span class="n">build</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=-</span><span class="mi">1</span><span class="p">);</span></div>
+
+
+<div class="viewcode-block" id="FormatData.buildClass2"><a class="viewcode-back" href="../FormatData.html#FormatData.FormatData.buildClass2">[docs]</a>    <span class="k">def</span> <span class="nf">buildClass2</span><span class="p">(</span><span class="n">allData</span><span class="p">,</span> <span class="n">estation</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">startDate</span><span class="p">,</span> <span class="n">endDate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function so that every date in the allData table is added n hours and get the value that belongs to it.</span>
+
+<span class="sd">        :param allData: is data extracted  the function readData</span>
+<span class="sd">        :type allData: DataFrame.</span>
+<span class="sd">        :param estation: station from wich the data will be taken.</span>
+<span class="sd">        :type estation: string.</span>
+<span class="sd">        :param contaminant: contaminant from wich the data will be taken.</span>
+<span class="sd">        :type contaminant: string.</span>
+<span class="sd">        :param delta : number of hours added to the original.</span>
+<span class="sd">        :type delta: int, float</span>
+<span class="sd">        :return: build</span>
+<span class="sd">        :rtype: DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">oztool</span> <span class="o">=</span> <span class="n">ContIOTools</span><span class="p">()</span>
+        <span class="n">conexion</span> <span class="o">=</span> <span class="n">SqlCont</span><span class="p">()</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">conexion</span><span class="o">.</span><span class="n">getPostgresConn</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">();</span>
+        <span class="c1">#conexion database</span>
+        <span class="n">tableContaminant</span> <span class="o">=</span> <span class="n">oztool</span><span class="o">.</span><span class="n">findTable</span><span class="p">(</span><span class="n">contaminant</span><span class="p">);</span><span class="c1"># name the contaminant in the database</span>
+        <span class="n">fechas</span> <span class="o">=</span> <span class="n">allData</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span>
+        <span class="n">build</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fechas</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]);</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">build</span><span class="o">.</span><span class="n">index</span><span class="p">);</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">cont</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">*-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">start</span>  <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">startDate</span><span class="p">,</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">endDate</span><span class="p">,</span><span class="s1">&#39;%Y/%m/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">startDelta</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">delta</span><span class="p">);</span><span class="c1">#You add the delta to the date</span>
+        <span class="n">endDelta</span> <span class="o">=</span> <span class="n">end</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="n">delta</span><span class="p">);</span><span class="c1">#You add the delta to the date</span>
+        <span class="k">for</span> <span class="n">xv</span> <span class="ow">in</span> <span class="n">estation</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">tableContaminant</span><span class="o">+</span><span class="s1">&#39;_&#39;</span><span class="o">+</span> <span class="n">xv</span> <span class="o">+</span> <span class="s1">&#39;_delta&#39;</span><span class="p">;</span><span class="c1">#name the column in the DataFrame</span>
+            <span class="n">sql</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;SELECT fecha, val FROM </span><span class="si">{0}</span><span class="s2"> WHERE id_est =&#39;</span><span class="si">{1}</span><span class="s2">&#39; AND fecha &gt;= &#39;</span><span class="si">{2}</span><span class="s2">&#39; AND fecha &lt;= &#39;</span><span class="si">{3}</span><span class="s2">&#39; ORDER BY fecha ASC;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tableContaminant</span><span class="p">,</span><span class="n">xv</span><span class="p">,</span><span class="n">startDelta</span><span class="p">,</span><span class="n">endDelta</span><span class="p">),</span><span class="n">conn</span><span class="p">);</span>
+            <span class="n">valPredic</span> <span class="o">=</span> <span class="n">sql</span><span class="p">[</span><span class="s1">&#39;val&#39;</span><span class="p">];</span>
+            <span class="k">if</span>  <span class="n">valPredic</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="n">temBuild</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">values</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">name</span><span class="p">]);</span>
+                <span class="n">build</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span> <span class="n">temBuild</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">build</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span> <span class="n">valPredic</span><span class="p">;</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+        <span class="c1">#The connection to the database is closed</span>
+        <span class="k">return</span> <span class="n">build</span><span class="p">;</span></div>
+
+<div class="viewcode-block" id="FormatData.saveData"><a class="viewcode-back" href="../FormatData.html#FormatData.FormatData.saveData">[docs]</a>    <span class="k">def</span> <span class="nf">saveData</span><span class="p">(</span><span class="n">estacion</span><span class="p">,</span> <span class="n">fecha</span><span class="p">,</span> <span class="n">Valor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        function to save the prediction in the database</span>
+<span class="sd">        </span>
+<span class="sd">        :param estacion: name of the station to which the prediction belongs</span>
+<span class="sd">        :type estacion: string</span>
+<span class="sd">        :param fecha: prediction date</span>
+<span class="sd">        :type fecha: date</span>
+<span class="sd">        :param valor: prediction value</span>
+<span class="sd">        :type valor: float32</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">oztool</span> <span class="o">=</span> <span class="n">ContIOTools</span><span class="p">();</span>
+        <span class="n">conexion</span> <span class="o">=</span> <span class="n">SqlCont</span><span class="p">();</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">conexion</span><span class="o">.</span><span class="n">getPostgresConn</span><span class="p">();</span>
+        <span class="n">cur</span><span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">();</span>
+        <span class="c1">#conexion database</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;INSERT INTO forecast_otres(fecha,val,id_est) VALUES (</span><span class="se">\&#39;</span><span class="si">{0}</span><span class="se">\&#39;</span><span class="s2">,</span><span class="si">{1}</span><span class="s2">,</span><span class="se">\&#39;</span><span class="si">{2}</span><span class="se">\&#39;</span><span class="s2">);&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fecha</span><span class="p">,</span><span class="n">Valor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">estacion</span><span class="p">);</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

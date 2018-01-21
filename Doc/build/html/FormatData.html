@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>FormatData module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>FormatData module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,10 +21,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="InformationDataFrame module" href="InformationDataFrame.html" />
+    <link rel="next" title="Utilites module" href="Utilites.html" />
     <link rel="prev" title="total_bash module" href="total_bash.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -41,8 +40,100 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="formatdata-module">
-<h1>FormatData module<a class="headerlink" href="#formatdata-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-FormatData">
+<span id="formatdata-module"></span><h1>FormatData module<a class="headerlink" href="#module-FormatData" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="FormatData.FormatData">
+<em class="property">class </em><code class="descclassname">FormatData.</code><code class="descname">FormatData</code><span class="sig-paren">(</span><em>arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormatData.html#FormatData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FormatData.FormatData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>docstring for FormatData</p>
+<dl class="method">
+<dt id="FormatData.FormatData.buildClass">
+<code class="descname">buildClass</code><span class="sig-paren">(</span><em>allData</em>, <em>estation</em>, <em>contaminant</em>, <em>delta</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormatData.html#FormatData.buildClass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FormatData.FormatData.buildClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function so that every date in the allData table is added n hours and get the value that belongs to it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>allData</strong> (<em>DataFrame.</em>) – is data extracted  the function readData</li>
+<li><strong>estation</strong> (<em>string.</em>) – station from wich the data will be taken.</li>
+<li><strong>contaminant</strong> (<em>string.</em>) – contaminant from wich the data will be taken.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param delta : number of hours added to the original.
+:type delta: int, float
+:return: build
+:rtype: DataFrame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FormatData.FormatData.buildClass2">
+<code class="descname">buildClass2</code><span class="sig-paren">(</span><em>allData</em>, <em>estation</em>, <em>contaminant</em>, <em>delta</em>, <em>startDate</em>, <em>endDate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormatData.html#FormatData.buildClass2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FormatData.FormatData.buildClass2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function so that every date in the allData table is added n hours and get the value that belongs to it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>allData</strong> (<em>DataFrame.</em>) – is data extracted  the function readData</li>
+<li><strong>estation</strong> (<em>string.</em>) – station from wich the data will be taken.</li>
+<li><strong>contaminant</strong> (<em>string.</em>) – contaminant from wich the data will be taken.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param delta : number of hours added to the original.
+:type delta: int, float
+:return: build
+:rtype: DataFrame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FormatData.FormatData.readData">
+<code class="descname">readData</code><span class="sig-paren">(</span><em>startDate</em>, <em>endDate</em>, <em>estations</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormatData.html#FormatData.readData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FormatData.FormatData.readData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to extract information from the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>startDate</strong> (<em>timedata</em>) – range of data wit wich the vaues of tue query are extracted.</td>
+</tr>
+</tbody>
+</table>
+<p>:param endDate : range of data wit wich the vaues of tue query are extracted.
+:type endDate: timedata
+:param estations: set the stations to get the values.
+:type estations : list with the stations
+:return : allData  all data that was taken from the database.
+:rtype: DataFrame</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="FormatData.FormatData.saveData">
+<code class="descname">saveData</code><span class="sig-paren">(</span><em>estacion</em>, <em>fecha</em>, <em>Valor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/FormatData.html#FormatData.saveData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FormatData.FormatData.saveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to save the prediction in the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>estacion</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) – name of the station to which the prediction belongs</li>
+<li><strong>fecha</strong> (<em>date</em>) – prediction date</li>
+<li><strong>valor</strong> (<em>float32</em>) – prediction value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -55,7 +146,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="total_bash.html" title="previous chapter">total_bash module</a></li>
-      <li>Next: <a href="InformationDataFrame.html" title="next chapter">InformationDataFrame module</a></li>
+      <li>Next: <a href="Utilites.html" title="next chapter">Utilites module</a></li>
   </ul></li>
 </ul>
 </div>
@@ -78,7 +169,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/FormatData.rst.txt"

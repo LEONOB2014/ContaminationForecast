@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>prediction &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>prediction &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,7 +21,6 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -46,7 +45,7 @@
 
 <div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../prediction.html#prediction.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName</span>
+<span class="sd">     Function to normalize an array of values with the minimum and the maximun that has been save in a .cvs fileName</span>
 
 <span class="sd">    :param data: data to normalize</span>
 <span class="sd">    :type data: array</span>
@@ -76,7 +75,7 @@
 
 <div class="viewcode-block" id="desNorm"><a class="viewcode-back" href="../prediction.html#prediction.desNorm">[docs]</a><span class="k">def</span> <span class="nf">desNorm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    function to denormalize a value</span>
+<span class="sd">     function to denormalize a value</span>
 
 <span class="sd">    :param data: value to be unmasked</span>
 <span class="sd">    :type data: float32</span>
@@ -104,7 +103,7 @@
 
 <div class="viewcode-block" id="init_weight"><a class="viewcode-back" href="../prediction.html#prediction.init_weight">[docs]</a><span class="k">def</span> <span class="nf">init_weight</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function for the define Variable function weight</span>
+<span class="sd">     Function for the define Variable function weight</span>
 
 <span class="sd">    :param shape: Matrix containing weight</span>
 <span class="sd">    :type shape : matrix float32</span>
@@ -116,7 +115,7 @@
 
 <div class="viewcode-block" id="init_bias"><a class="viewcode-back" href="../prediction.html#prediction.init_bias">[docs]</a><span class="k">def</span> <span class="nf">init_bias</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function for the define Variable function weight</span>
+<span class="sd">     Function for the define Variable function weight</span>
 
 <span class="sd">    :param shape: Matrix containing bias</span>
 <span class="sd">    :type shape : matrix float32</span>
@@ -133,7 +132,7 @@
 
 <div class="viewcode-block" id="prediction"><a class="viewcode-back" href="../prediction.html#prediction.prediction">[docs]</a><span class="k">def</span> <span class="nf">prediction</span><span class="p">(</span><span class="n">station</span><span class="p">,</span> <span class="n">contaminant</span><span class="p">,</span> <span class="n">arrayPred</span><span class="p">,</span> <span class="n">dirTrain</span><span class="p">,</span> <span class="n">dirData</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function to obtain a prediction of a neural network that has</span>
+<span class="sd">     Function to obtain a prediction of a neural network that has</span>
 <span class="sd">    already been trained previously</span>
 <span class="sd">    </span>
 <span class="sd">    :param station: station name for the prediction</span>
@@ -218,7 +217,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
     </div>
 

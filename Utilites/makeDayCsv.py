@@ -117,4 +117,9 @@ def make18():
     dataC = dataC.reset_index(drop=True);
     dataC.to_csv('../data/Festivos.csv', encoding='utf-8',index=False);
 
+<<<<<<< HEAD
 make18();
+=======
+#make18();
+#readCsv();
+>>>>>>> c3ff00c59be3d5bf811e14f195ead7e91ee19481

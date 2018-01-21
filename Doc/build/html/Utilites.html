@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Utilites module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>Utilites module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,11 +21,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="makeDayCsv module" href="makeDayCsv.html" />
-    <link rel="prev" title="InformationDataFrame module" href="InformationDataFrame.html" />
+    <link rel="prev" title="FormatData module" href="FormatData.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -41,8 +40,72 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="utilites-module">
-<h1>Utilites module<a class="headerlink" href="#utilites-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-Utilites">
+<span id="utilites-module"></span><h1>Utilites module<a class="headerlink" href="#module-Utilites" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="Utilites.converToArray">
+<code class="descclassname">Utilites.</code><code class="descname">converToArray</code><span class="sig-paren">(</span><em>alldata</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Utilites.html#converToArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utilites.converToArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that returns in a single column the columns have a specific name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>alldata</strong> (<em>DataFrame</em>) – matrix with all the data of the database</li>
+<li><strong>contaminant</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) – Name of pollutant to look for</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">column with all data of the pollutant</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:rtype; float32</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Utilites.prepro">
+<code class="descclassname">Utilites.</code><code class="descname">prepro</code><span class="sig-paren">(</span><em>data</em>, <em>build</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Utilites.html#prepro"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utilites.prepro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to normalize the data of the neuronal network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – training data</li>
+<li><strong>build</strong> – training data</li>
+<li><strong>contaminant</strong> – name of the contaminant</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return : normalize data
+:type return: list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Utilites.prepro2">
+<code class="descclassname">Utilites.</code><code class="descname">prepro2</code><span class="sig-paren">(</span><em>data</em>, <em>build</em>, <em>contaminant</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Utilites.html#prepro2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utilites.prepro2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to normalize the data of the neuronal network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> – training data</li>
+<li><strong>build</strong> – training data</li>
+<li><strong>contaminant</strong> – name of the contaminant</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return : normalize data
+:type return: list</p>
+</dd></dl>
+
 </div>
 
 
@@ -54,7 +117,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="InformationDataFrame.html" title="previous chapter">InformationDataFrame module</a></li>
+      <li>Previous: <a href="FormatData.html" title="previous chapter">FormatData module</a></li>
       <li>Next: <a href="makeDayCsv.html" title="next chapter">makeDayCsv module</a></li>
   </ul></li>
 </ul>
@@ -78,7 +141,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/Utilites.rst.txt"

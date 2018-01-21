@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>InformationDataFrame module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>InformationDataFrame module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,7 +21,6 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Utilites module" href="Utilites.html" />
@@ -41,8 +40,91 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="informationdataframe-module">
-<h1>InformationDataFrame module<a class="headerlink" href="#informationdataframe-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-InformationDataFrame">
+<span id="informationdataframe-module"></span><h1>InformationDataFrame module<a class="headerlink" href="#module-InformationDataFrame" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="InformationDataFrame.anios">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">anios</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#anios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.anios" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to extract the number of years of data that a dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>DataFrame</em>) – DataFrame</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">numbers of years</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="InformationDataFrame.colormap">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">colormap</code><span class="sig-paren">(</span><em>name</em>, <em>est</em>, <em>nameColumn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#colormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.colormap" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to create a heatmap</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>String</em>) – station name</li>
+<li><strong>est</strong> (<em>String</em>) – station</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param nameColumn : list with the name of the dataframe columns
+:type nameColumn: String list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="InformationDataFrame.estImg">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">estImg</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#estImg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.estImg" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to create a heatmap</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="InformationDataFrame.information">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">information</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#information"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.information" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to create a graph of the columns and lines that has information
+each station in the  Red Automática de Monitoreo Atmosférico (RAMA)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="InformationDataFrame.nameC">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">nameC</code><span class="sig-paren">(</span><em>nameColumn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#nameC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.nameC" title="Permalink to this definition">¶</a></dt>
+<dd><p>function that returns from the abbreviation name of a columns</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>station</strong> (<em>String</em>) – full name of the column</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">abbreviation name of the column</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="InformationDataFrame.nombreEst">
+<code class="descclassname">InformationDataFrame.</code><code class="descname">nombreEst</code><span class="sig-paren">(</span><em>station</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InformationDataFrame.html#nombreEst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#InformationDataFrame.nombreEst" title="Permalink to this definition">¶</a></dt>
+<dd><p>function that returns from the full name of a station</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>station</strong> (<em>String</em>) – abbreviation of the name of the station</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">full name of the station</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -78,7 +160,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/InformationDataFrame.rst.txt"

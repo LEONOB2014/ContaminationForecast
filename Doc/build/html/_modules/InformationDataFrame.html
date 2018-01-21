@@ -1,0 +1,281 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>InformationDataFrame &#8212; Contamination Forecast 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for InformationDataFrame</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;agg&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">df</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+
+<span class="n">est</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;AJM&#39;</span><span class="p">,</span><span class="s1">&#39;MGH&#39;</span><span class="p">,</span><span class="s1">&#39;CCA&#39;</span><span class="p">,</span><span class="s1">&#39;SFE&#39;</span><span class="p">,</span><span class="s1">&#39;UAX&#39;</span><span class="p">,</span><span class="s1">&#39;CUA&#39;</span><span class="p">,</span><span class="s1">&#39;NEZ&#39;</span><span class="p">,</span><span class="s1">&#39;CAM&#39;</span><span class="p">,</span><span class="s1">&#39;LPR&#39;</span><span class="p">,</span><span class="s1">&#39;SJA&#39;</span><span class="p">,</span><span class="s1">&#39;IZT&#39;</span><span class="p">,</span><span class="s1">&#39;SAG&#39;</span><span class="p">,</span><span class="s1">&#39;TAH&#39;</span><span class="p">,</span><span class="s1">&#39;ATI&#39;</span><span class="p">,</span><span class="s1">&#39;FAC&#39;</span><span class="p">,</span><span class="s1">&#39;UIZ&#39;</span><span class="p">,</span><span class="s1">&#39;MER&#39;</span><span class="p">,</span><span class="s1">&#39;PED&#39;</span><span class="p">,</span><span class="s1">&#39;TLA&#39;</span><span class="p">,</span><span class="s1">&#39;XAL&#39;</span><span class="p">,</span><span class="s1">&#39;CHO&#39;</span><span class="p">,</span><span class="s1">&#39;BJU&#39;</span><span class="p">];</span>
+<span class="c1">#est = [&#39;LPR&#39;];</span>
+<span class="n">dirr</span> <span class="o">=</span> <span class="s1">&#39;../data/DatosCC/&#39;</span><span class="p">;</span>
+<span class="n">contaminant</span> <span class="o">=</span> <span class="s1">&#39;O3&#39;</span><span class="p">;</span>
+
+<div class="viewcode-block" id="information"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.information">[docs]</a><span class="k">def</span> <span class="nf">information</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to create a graph of the columns and lines that has information</span>
+<span class="sd">    each station in the  Red Automática de Monitoreo Atmosférico (RAMA)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">anio</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">columnas</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">numIndex</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">est</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">dirr</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">anios</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">anio</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="n">column</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">columnas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">column</span><span class="p">));</span>
+        <span class="n">inde</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">;</span>
+        <span class="n">numIndex</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">inde</span><span class="p">)</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">column</span><span class="p">));</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">est</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;estacion&#39;</span><span class="p">]);</span>
+    <span class="n">cAnio</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">anio</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;anio&#39;</span><span class="p">]);</span>
+    <span class="n">cColum</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columnas</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;columnas&#39;</span><span class="p">]);</span>
+    <span class="n">cIndex</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">numIndex</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NumDatos&#39;</span><span class="p">]);</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;anio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cAnio</span><span class="p">;</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;columnas&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">cColum</span><span class="p">;</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;NumDatos&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">cIndex</span><span class="p">;</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;estacion&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;anio&#39;</span><span class="p">,</span><span class="s1">&#39;columnas&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;winter&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">),</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Numero de años y columnas con las que se entrena cada estacion.&#39;</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../Graficas/Informacion/estAnios.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;estacion&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;NumDatos&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;winter&#39;</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.2</span><span class="p">,</span><span class="mf">6.4</span><span class="p">),</span> <span class="n">title</span> <span class="o">=</span><span class="s1">&#39;Numero renglones que tiene cada estacion&#39;</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../Graficas/Informacion/estReng.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">info</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;../Graficas/Informacion/infEstaciones.cvs&#39;</span><span class="p">,</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+    <span class="n">estImg</span><span class="p">();</span></div>
+
+
+<div class="viewcode-block" id="estImg"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.estImg">[docs]</a><span class="k">def</span> <span class="nf">estImg</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to create a heatmap</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">est</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">dirr</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span><span class="o">+</span><span class="n">contaminant</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+        <span class="n">nameColumn</span><span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+        <span class="n">nColumn</span> <span class="o">=</span> <span class="n">nameColumn</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">nColumn</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;fecha&#39;</span><span class="p">);</span>
+        <span class="n">colormap</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">value</span><span class="p">,</span><span class="n">nColumn</span><span class="p">);</span></div>
+
+
+<div class="viewcode-block" id="anios"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.anios">[docs]</a><span class="k">def</span> <span class="nf">anios</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to extract the number of years of data that a dataframe</span>
+
+<span class="sd">    :param data: DataFrame</span>
+<span class="sd">    :type data: DataFrame</span>
+<span class="sd">    :return: numbers of years</span>
+<span class="sd">    :return type: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">anios</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">actual</span> <span class="o">=</span> <span class="mi">2017</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">anios</span><span class="p">:</span>
+        <span class="n">valueAnio</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="n">valueAnio</span><span class="o">.</span><span class="n">year</span> <span class="o">&lt;</span> <span class="n">actual</span><span class="p">:</span>
+            <span class="n">actual</span> <span class="o">=</span> <span class="n">valueAnio</span><span class="o">.</span><span class="n">year</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">2016</span> <span class="o">-</span><span class="n">actual</span></div>
+
+
+<div class="viewcode-block" id="nombreEst"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.nombreEst">[docs]</a><span class="k">def</span> <span class="nf">nombreEst</span><span class="p">(</span><span class="n">station</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function that returns from the full name of a station</span>
+
+<span class="sd">    :param station: abbreviation of the name of the station</span>
+<span class="sd">    :type station: String</span>
+<span class="sd">    :return: full name of the station</span>
+<span class="sd">    :type return: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;AJM&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Ajusco Medio&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;MGH&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Miguel Hidalgo&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;CCA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Centro de Ciencias de la Atmosfera&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;SFE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Santa Fe&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;UAX&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;UAM Xochimilco&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;CUA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Cuajimalpa&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;NEZ&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Nezahualcóyotl&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;CAM&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Camarones&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;LPR&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;La Presa&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;SJA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;San Juan Aragón&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;CHO&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Chalco&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;IZT&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Iztacalco&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;SAG&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;San Agustín&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;TAH&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Tlahuac&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;ATI&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Atizapan&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;FAC&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;FES Acatlán&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;UIZ&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;UAM Iztapalapa&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;MER&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Merced&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;PED&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Pedregal&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;TLA&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;tlalnepantla&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;BJU&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Benito Juárez&#39;</span><span class="p">;</span>
+    <span class="k">elif</span> <span class="n">station</span> <span class="o">==</span> <span class="s1">&#39;XAL&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;Xalostoc&#39;</span><span class="p">;</span></div>
+
+
+<div class="viewcode-block" id="nameC"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.nameC">[docs]</a><span class="k">def</span> <span class="nf">nameC</span><span class="p">(</span><span class="n">nameColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function that returns from the abbreviation name of a columns</span>
+
+<span class="sd">    :param station: full name of the column</span>
+<span class="sd">    :type station: String</span>
+<span class="sd">    :return: abbreviation name of the column</span>
+<span class="sd">    :type return: String</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">nameColumn</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;cont_pmco&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pmco&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_pmdoscinco&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pmdoscinco&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_nox&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;nox&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_codos&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;codos&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_co&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;co&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_nodos&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;nodos&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_no&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_otres&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;otres&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_sodos&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;sodos&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;cont_pmdiez&#39;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;pmdiez&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">names</span></div>
+
+
+<div class="viewcode-block" id="colormap"><a class="viewcode-back" href="../InformationDataFrame.html#InformationDataFrame.colormap">[docs]</a><span class="k">def</span> <span class="nf">colormap</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">est</span><span class="p">,</span> <span class="n">nameColumn</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to create a heatmap</span>
+<span class="sd">    </span>
+<span class="sd">    :param name: station name</span>
+<span class="sd">    :type name: String</span>
+<span class="sd">    :param est: station</span>
+<span class="sd">    :type est: String</span>
+<span class="sd">    :param nameColumn : list with the name of the dataframe columns</span>
+<span class="sd">    :type nameColumn: String list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nameColumn</span> <span class="o">=</span> <span class="n">nameC</span><span class="p">(</span><span class="n">nameColumn</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Imagen de los datos de la estacion &#39;</span><span class="o">+</span> <span class="n">nombreEst</span><span class="p">(</span><span class="n">est</span><span class="p">);</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;fecha&#39;</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.2</span><span class="p">,</span><span class="mf">8.4</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">vmax</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span><span class="n">yticklabels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">xticklabels</span><span class="o">=</span><span class="n">nameColumn</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">data</span> <span class="o">!=-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;../Graficas/Informacion/Imagen_&quot;</span><span class="o">+</span><span class="n">est</span><span class="o">+</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">600</span><span class="p">);</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<span class="c1">#information()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

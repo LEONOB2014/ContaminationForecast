@@ -1,0 +1,206 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>makeDayCsv &#8212; Contamination Forecast 1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for makeDayCsv</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">concat</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">df</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Function to create csv file with the holidays from 1996 to 2016 from another cvs file</span>
+<span class="sd">0 = laboral</span>
+<span class="sd">1 = oficial</span>
+<span class="sd">2 = sep</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="readCsv"><a class="viewcode-back" href="../makeDayCsv.html#makeDayCsv.readCsv">[docs]</a><span class="k">def</span> <span class="nf">readCsv</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create csv file with the holidays from 1996 to 2016 from another cvs file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dataTemp</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data.csv&#39;</span><span class="p">);</span>
+    <span class="n">dataTemp</span> <span class="o">=</span> <span class="n">dataTemp</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">,</span><span class="s1">&#39;Unnamed: 1&#39;</span><span class="p">,</span><span class="s1">&#39;Unnamed: 23&#39;</span><span class="p">,</span> <span class="s1">&#39;Unnamed: 24&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">fillTable</span><span class="p">(</span><span class="n">dataTemp</span><span class="p">);</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;../data/Festivos.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">);</span></div>
+
+
+
+<div class="viewcode-block" id="fillTable"><a class="viewcode-back" href="../makeDayCsv.html#makeDayCsv.fillTable">[docs]</a><span class="k">def</span> <span class="nf">fillTable</span><span class="p">(</span><span class="n">dataTemp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create the csv file with the holidays in the necessary format</span>
+<span class="sd">    to add them to the other data of the neural network.</span>
+
+<span class="sd">    :param dataTemp: Information from the original cvs</span>
+<span class="sd">    :type dataTemp: DataFrame</span>
+<span class="sd">    :return: DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">column</span> <span class="o">=</span> <span class="n">dataTemp</span><span class="o">.</span><span class="n">columns</span><span class="p">;</span>
+    <span class="c1">#print(anio.values);</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">column</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="n">valAnio</span> <span class="o">=</span> <span class="n">dataTemp</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+    <span class="n">anioC</span> <span class="o">=</span> <span class="n">hours24</span><span class="p">(</span><span class="n">valAnio</span><span class="o">.</span><span class="n">values</span><span class="p">);</span>
+    <span class="n">listt</span> <span class="o">=</span> <span class="n">makeDates</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">listt</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]);</span>
+    <span class="n">dataVal</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">anioC</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]);</span>
+    <span class="n">data</span><span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">dataVal</span><span class="p">;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">column</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">column</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">valAnio</span> <span class="o">=</span> <span class="n">dataTemp</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+        <span class="n">anioC</span> <span class="o">=</span> <span class="n">hours24</span><span class="p">(</span><span class="n">valAnio</span><span class="o">.</span><span class="n">values</span><span class="p">);</span>
+        <span class="n">listt</span> <span class="o">=</span> <span class="n">makeDates</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+        <span class="n">dataComp</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">listt</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]);</span>
+        <span class="n">dataVal</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">anioC</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]);</span>
+        <span class="n">dataComp</span><span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span><span class="o">=</span> <span class="n">dataVal</span><span class="p">;</span>
+        <span class="n">data</span><span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span><span class="n">dataComp</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">();</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">;</span></div>
+
+
+<div class="viewcode-block" id="hours24"><a class="viewcode-back" href="../makeDayCsv.html#makeDayCsv.hours24">[docs]</a><span class="k">def</span> <span class="nf">hours24</span><span class="p">(</span><span class="n">anio</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to put the value of a given date in each hour of the day</span>
+
+<span class="sd">    :param anio: Value to repeat for 24 hours</span>
+<span class="sd">    :type anio: int</span>
+<span class="sd">    :return : int array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">anioComplete</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">anio</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">24</span><span class="p">):</span>
+            <span class="n">anioComplete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">anioComplete</span><span class="p">;</span></div>
+
+
+
+<div class="viewcode-block" id="makeDates"><a class="viewcode-back" href="../makeDayCsv.html#makeDayCsv.makeDates">[docs]</a><span class="k">def</span> <span class="nf">makeDates</span><span class="p">(</span><span class="n">anio</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to create the dates</span>
+<span class="sd">    </span>
+<span class="sd">    :param anio: start year</span>
+<span class="sd">    :type anio: int</span>
+<span class="sd">    :return datetime array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">listDates</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">anio</span><span class="o">+</span><span class="s1">&#39;-01-01 00:00:00&#39;</span><span class="p">;</span>
+    <span class="n">dateInit</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date</span><span class="p">,</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">);</span>
+    <span class="n">listDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dateInit</span><span class="p">);</span>
+    <span class="n">val</span>  <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">anio</span><span class="p">);</span>
+    <span class="k">while</span> <span class="n">val</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">anio</span><span class="p">):</span>
+        <span class="n">dateInit</span> <span class="o">=</span> <span class="n">dateInit</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span> <span class="o">=</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">dateInit</span><span class="o">.</span><span class="n">year</span>
+        <span class="n">listDates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dateInit</span><span class="p">);</span>
+    <span class="n">listDates</span><span class="o">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">listDates</span><span class="p">;</span></div>
+
+<div class="viewcode-block" id="make18"><a class="viewcode-back" href="../makeDayCsv.html#makeDayCsv.make18">[docs]</a><span class="k">def</span> <span class="nf">make18</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function th create the holidays of the year 2018</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Festivos.csv&#39;</span><span class="p">);</span>
+    <span class="n">fecha</span> <span class="o">=</span> <span class="n">makeDates</span><span class="p">(</span><span class="s1">&#39;2018&#39;</span><span class="p">);</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fecha</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fecha&#39;</span><span class="p">]);</span>
+    <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">index</span><span class="p">));</span>
+    <span class="n">dZ</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zeros</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]);</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dZ</span><span class="p">;</span>
+    <span class="n">festivosOficiales</span> <span class="o">=</span><span class="p">[</span><span class="s1">&#39;01-01&#39;</span><span class="p">,</span><span class="s1">&#39;01-06&#39;</span><span class="p">,</span><span class="s1">&#39;02-05&#39;</span><span class="p">,</span><span class="s1">&#39;03-19&#39;</span><span class="p">,</span><span class="s1">&#39;04-01&#39;</span><span class="p">,</span><span class="s1">&#39;05-01&#39;</span><span class="p">,</span><span class="s1">&#39;09-16&#39;</span><span class="p">,</span><span class="s1">&#39;11-19&#39;</span><span class="p">,</span><span class="s1">&#39;12-01&#39;</span><span class="p">,</span><span class="s1">&#39;12-25&#39;</span><span class="p">]</span>
+    <span class="k">for</span>  <span class="n">i</span> <span class="ow">in</span> <span class="n">festivosOficiales</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">f</span><span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&gt;=</span> <span class="s1">&#39;2018-&#39;</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="s1">&#39; 00:00:00&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&lt;=</span> <span class="s1">&#39;2018-&#39;</span><span class="o">+</span><span class="n">i</span><span class="o">+</span><span class="s1">&#39; 23:00:00&#39;</span><span class="p">)]</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">temp</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">vac</span> <span class="o">=</span> <span class="n">f</span><span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&gt;=</span> <span class="s1">&#39;2018-01-02 00:00:00&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&lt;=</span> <span class="s1">&#39;2018-01-05 23:00:00&#39;</span><span class="p">)]</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">vac</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">vac</span> <span class="o">=</span> <span class="n">f</span><span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&gt;=</span> <span class="s1">&#39;2018-03-26 00:00:00&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&lt;=</span> <span class="s1">&#39;2018-04-06 23:00:00&#39;</span><span class="p">)]</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">vac</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">vac</span> <span class="o">=</span> <span class="n">f</span><span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&gt;=</span> <span class="s1">&#39;2018-06-25 00:00:00&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&lt;=</span> <span class="s1">&#39;2018-08-23 23:00:00&#39;</span><span class="p">)]</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">vac</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">vac</span> <span class="o">=</span> <span class="n">f</span><span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&gt;=</span> <span class="s1">&#39;2018-12-24 00:00:00&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fecha</span> <span class="o">&lt;=</span> <span class="s1">&#39;2018-12-31 23:00:00&#39;</span><span class="p">)]</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">vac</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="s1">&#39;valLab&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">dataC</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span><span class="n">f</span><span class="p">])</span>
+    <span class="n">dataC</span> <span class="o">=</span> <span class="n">dataC</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+    <span class="n">dataC</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;../data/Festivos.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span></div>
+
+<span class="c1">#make18();</span>
+<span class="c1">#readCsv();</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Pablo Camacho Gonzalez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

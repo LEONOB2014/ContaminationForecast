@@ -310,6 +310,6 @@ est1 = ['CHO']
 est2 = ['BJU']
 startDate1 = ['2007/07/20']
 startDate2 = ['1986/01/12']
-saveData(est, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
-saveData2(est1, startDate1, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
-saveData2(est2, startDate2, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
+#saveData(est, startDate, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
+#saveData2(est1, startDate1, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)
+#saveData2(est2, startDate2, nameContaminant, endDate, dirr, dirTotalCsv, contaminant)

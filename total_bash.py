@@ -24,10 +24,10 @@ numE = 3
 print(datos[numEs])
 if op == 1:
     # tp.init(datos[0],datosComp[0],graficas[numEs],train[numEs])
-    tp.init(datos[numE], datosComp[numE], graficas[numEs], train[numEs], contaminant,columnContaminant, fechaInicio, fechaFinal)
+    #tp.init(datos[numE], datosComp[numE], graficas[numEs], train[numEs], contaminant,columnContaminant, fechaInicio, fechaFinal)
 elif op == 2:
     est1 = ['CHO']
     est2 = ['BJU']
-    au.trainNeuralNetworks(est, datos[numE], train[numEs], fechaFinal, contaminant)
-    au.trainNeuralNetworks(est1, datos[numE], train[numEs], fechaFinal, contaminant)
-    au.trainNeuralNetworks(est2, datos[numE], train[numEs], fechaFinal, contaminant)
+    #au.trainNeuralNetworks(est, datos[numE], train[numEs], fechaFinal, contaminant)
+    #au.trainNeuralNetworks(est1, datos[numE], train[numEs], fechaFinal, contaminant)
+    #au.trainNeuralNetworks(est2, datos[numE], train[numEs], fechaFinal, contaminant)

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>makeCsv module &#8212; ContaminationForecast 0.1 documentation</title>
+    <title>makeCsv module &#8212; Contamination Forecast 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -21,10 +21,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="neuralNetwork module" href="neuralNetwork.html" />
+    <link rel="next" title="prediction module" href="prediction.html" />
     <link rel="prev" title="completeTable module" href="completeTable.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -41,8 +40,226 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="makecsv-module">
-<h1>makeCsv module<a class="headerlink" href="#makecsv-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-makeCsv">
+<span id="makecsv-module"></span><h1>makeCsv module<a class="headerlink" href="#module-makeCsv" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="makeCsv.checkFile">
+<code class="descclassname">makeCsv.</code><code class="descname">checkFile</code><span class="sig-paren">(</span><em>net</em>, <em>name</em>, <em>date</em>, <em>opt</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#checkFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.checkFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check if the file has
+the requiered parameters.</p>
+<p>:param net : information that contains the file
+:type net: Dataset
+:param name: file name
+:type name : string
+:param date: date
+:type date: string
+:param opt: option
+:type opt: int</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.clearString">
+<code class="descclassname">makeCsv.</code><code class="descname">clearString</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#clearString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.clearString" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to remove the extension of a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>String</em>) – file name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name file witout extension</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">String</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.completeMet">
+<code class="descclassname">makeCsv.</code><code class="descname">completeMet</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#completeMet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.completeMet" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to store the meteorological information in a dataframe</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>DataFrame</em>) – meteorology data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">DataFrame with information</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.conver1D">
+<code class="descclassname">makeCsv.</code><code class="descname">conver1D</code><span class="sig-paren">(</span><em>array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#conver1D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.conver1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to convert an array to a list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>array</strong> – array with the data</td>
+</tr>
+</tbody>
+</table>
+<p>:type array = matrix float32
+:return : list with the data
+:return type: list float32</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.divData">
+<code class="descclassname">makeCsv.</code><code class="descname">divData</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#divData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.divData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to divide the data matrix into 4 submatrices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<em>NetCDF</em>) – information of NetCDF</td>
+</tr>
+</tbody>
+</table>
+<p>:return : 4 submatrices
+:return type : matrix float32</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.makeCsv">
+<code class="descclassname">makeCsv.</code><code class="descname">makeCsv</code><span class="sig-paren">(</span><em>net</em>, <em>date</em>, <em>opt</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#makeCsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.makeCsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create .csv files of some variables that are in a NetCDF file,</p>
+<p>the .cvs file is saved in the data/NetCDF path of the project
+:param net : NetCDF file information
+:param type: NetCDF type
+:param date: initial date
+:param type: string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.makeDates">
+<code class="descclassname">makeCsv.</code><code class="descname">makeDates</code><span class="sig-paren">(</span><em>date</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#makeDates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.makeDates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create a list with the format year-month-day hours:minutes:seconds</p>
+<p>from 00 hours to 23 hours
+:param date : initial date
+:param type : string
+:return : list with the dates
+:return type : list datatime</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.nameColumns">
+<code class="descclassname">makeCsv.</code><code class="descname">nameColumns</code><span class="sig-paren">(</span><em>name</em>, <em>numbColumns</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#nameColumns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.nameColumns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create list with the name of the columns</p>
+<p>from the variables
+:param name : Variable name
+:param type : string
+:param numbColumns : Number of columns
+:param type: int
+:return : list with the name of the columns
+:return type: list string</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.open_netcdf">
+<code class="descclassname">makeCsv.</code><code class="descname">open_netcdf</code><span class="sig-paren">(</span><em>ls</em>, <em>nameFile</em>, <em>cadena</em>, <em>pathCopyData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#open_netcdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.open_netcdf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to open a NetCDF file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ls</strong> (<em>String</em>) – address file</li>
+<li><strong>nameFile</strong> (<em>String</em>) – file name</li>
+<li><strong>cadena</strong> (<em>String</em>) – name of the file without extension</li>
+<li><strong>pathCopyData</strong> (<em>String</em>) – address to copy the file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return : data in NetCDF
+:type return: NetCDF</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.readCsv">
+<code class="descclassname">makeCsv.</code><code class="descname">readCsv</code><span class="sig-paren">(</span><em>variables</em>, <em>path</em>, <em>pathCsv</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#readCsv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.readCsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to join the information of the variables in a single file</p>
+<p>:param variables : netCDF4 file name
+:type variables: string
+:param path: address where it is saved in .cvs file
+:type path: String
+:param pathCsv: address of csv files
+:type pathCsv: String</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.readFiles">
+<code class="descclassname">makeCsv.</code><code class="descname">readFiles</code><span class="sig-paren">(</span><em>opt</em>, <em>path</em>, <em>pathCopyData</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#readFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.readFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to read all NetCDF files that are in the specified path
+and named by the format Dom1_year-month-day.nc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>opt</strong> – option to save data</li>
+<li><strong>path</strong> – address file</li>
+<li><strong>pathCopyData</strong> (<em>String</em>) – address to copy the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return opt:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return path:</th><td class="field-body"><p class="first last">String</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.saveData">
+<code class="descclassname">makeCsv.</code><code class="descname">saveData</code><span class="sig-paren">(</span><em>var</em>, <em>variables</em>, <em>date</em>, <em>opt</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#saveData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.saveData" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to save the information in a .csv file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>var</strong> (<em>NetCDF</em>) – information of NetCDF</li>
+<li><strong>variables</strong> (<em>String</em>) – meteorological variables</li>
+<li><strong>date</strong> (<em>date</em>) – date of day</li>
+<li><strong>opt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – option to save file</li>
+<li><strong>path</strong> (<em>String</em>) – address where it is saved in .cvs file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="makeCsv.totalFiles">
+<code class="descclassname">makeCsv.</code><code class="descname">totalFiles</code><span class="sig-paren">(</span><em>pathCopyData</em>, <em>pathNetCDF</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/makeCsv.html#totalFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#makeCsv.totalFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to save the address of the netCDF in a txt file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pathCopyData</strong> (<em>String</em>) – address to copy the file</li>
+<li><strong>pathNetCDF</strong> (<em>String</em>) – address where the net files are located</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -55,7 +272,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="completeTable.html" title="previous chapter">completeTable module</a></li>
-      <li>Next: <a href="neuralNetwork.html" title="next chapter">neuralNetwork module</a></li>
+      <li>Next: <a href="prediction.html" title="next chapter">prediction module</a></li>
   </ul></li>
 </ul>
 </div>
@@ -78,7 +295,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
       
       |
       <a href="_sources/makeCsv.rst.txt"
